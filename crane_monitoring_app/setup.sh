@@ -58,7 +58,7 @@ else
   systemctl restart mysql
 fi
 
-read -p "Install Mysql? 0 - no, 1 - yes: " installMysqlConnector
+read -p "Install python mysql.connector? 0 - no, 1 - yes: " installMysqlConnector
 if [ $installMysqlConnector == 0 ]; then
   echo "Cntinue without installing mysql-connector-python"
 else
@@ -73,21 +73,38 @@ mkdir ~/developer/flutter-proj
 mkdir ~/developer/python-proj
 cd ~/developer/
 
-sudo apt update && sudo apt install git
-sudo apt-get install curl
-sudo apt install dart
-dart --disable-analytics
-dart --version
+read -p "Install git & curl ? 0 - no, 1 - yes: " installGit
+if [ $installGit == 0 ]; then
+  echo "Cntinue without installing mysql-connector-python"
+else
+  echo "\n\ninstalling git" 
+  sudo apt update && sudo apt install git
+  echo "\n\ninstalling curl" 
+  sudo apt-get install curl
+fi
 
-git clone https://github.com/flutter/flutter.git -b stable
+read -p "Install dart & curl ? 0 - no, 1 - yes: " installDart
+if [ $installDart == 0 ]; then
+  echo "Cntinue without installing dart"
+else
+  echo "\n\ninstalling dart" 
+  sudo apt install dart
+  dart --disable-analytics
+  dart --version
+fi
 
-export PATH="$PATH:~/developer/flutter/bin"
-which flutter dart
-
-sudo apt update
-sudo apt install clang cmake ninja-build libgtk-3-dev
-
-flutter doctor -v
+read -p "Install flutter & curl ? 0 - no, 1 - yes: " installflutter
+if [ $installflutter == 0 ]; then
+  echo "Cntinue without installing flutter"
+else
+  echo "\n\ninstalling flutter" 
+  git clone https://github.com/flutter/flutter.git -b stable
+  export PATH="$PATH:~/developer/flutter/bin"
+  which flutter dart
+  sudo apt update
+  sudo apt install clang cmake ninja-build libgtk-3-dev
+  flutter doctor -v
+fi
 
 #ssh-keygen -t ed25519 -C a.givertzman@icloud.com
 #eval "$(ssh-agent -s)"
