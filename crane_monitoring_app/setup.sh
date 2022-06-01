@@ -142,9 +142,9 @@ rm -r -f ~/developer/flutter-proj/crane_monitoring_app
 git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
 
 echo "\nstarting up python server application api_server..." 
-python3 ~/developer/python-proj/s7-data-server/api_server.py
+gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/developer/python-proj/s7-data-server/api_server.py"
 echo "\nstarting up python server application socket_data_server..." 
-python3 ~/developer/python-proj/s7-data-server/socket_data_server_test.py
+gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/developer/python-proj/s7-data-server/socket_data_server_test.py"
 
 cd ~/developer/flutter-proj/crane_monitoring_app/
 flutter upgrade
