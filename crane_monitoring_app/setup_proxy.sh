@@ -23,7 +23,8 @@ elif [[ $useProxy == 1 ]]; then
 
     echo "\tconfiguring system proxy..."
     pre="$proxyUser:$proxyPass@"
-    proxy=$pre$proxyIP:$proxyPort
+    proxy="http://$pre$proxyIP:$proxyPort/"
+    echo "\tproxy: $proxy"
     export http_proxy=$proxy
     export https_proxy=$proxy
     export ftp_proxy=$proxy
