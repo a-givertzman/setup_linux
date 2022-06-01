@@ -22,17 +22,17 @@ elif [[ $useProxy == 1 ]]; then
     read proxyPass
 
     echo "\tconfiguring system proxy..."
-    pre="$proxyUser:$proxyPass@"
-    proxy="http://$pre$proxyIP:$proxyPort"
+    #pre="$proxyUser:$proxyPass@"
+    proxy=$proxyIP:$proxyPort
     echo "\tproxy: $proxy"
     export http_proxy=$proxy
     export https_proxy=$proxy
     export ftp_proxy=$proxy
-    export rsync_proxy=$proxy
-    export  HTTP_PROXY=$proxy
-    export HTTPS_PROXY=$proxy
-    export FTP_PROXY=$proxy
-    export RSYNC_PROXY=$proxy    
+    #export rsync_proxy=$proxy
+    #export HTTP_PROXY=$proxy
+    #export HTTPS_PROXY=$proxy
+    #export FTP_PROXY=$proxy
+    #export RSYNC_PROXY=$proxy    
     export no_proxy="localhost,127.0.0.1,::1"
 
     echo "\tconfiguring git proxy..."
