@@ -32,6 +32,7 @@ elif [[ $useProxy == 1 ]]; then
     export HTTPS_PROXY=$proxy
     export FTP_PROXY=$proxy
     export RSYNC_PROXY=$proxy    
+    export no_proxy="localhost,127.0.0.1,::1"
 
     echo "\tconfiguring git proxy..."
     git config --global http.proxy $proxyUser:$proxyPass@$proxyIP:$proxyPort
