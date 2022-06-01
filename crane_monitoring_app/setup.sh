@@ -75,7 +75,7 @@ flutter doctor -v
 echo "\n\ninstalling python server application s7-data-server..." 
 cd ~/developer/python-proj/ 
 rm -r -f ~/developer/python-proj/s7-data-server 
-git clone git@github.com:a-givertzman/s7-data-server.git -b master 
+git clone git@github.com:a-givertzman/s7-data-server.git -b ied-reading-in-thread 
 
 echo "\n\ninstalling dart/flutter client application crane_monitoring_app"
 cd ~/developer/flutter-proj/
