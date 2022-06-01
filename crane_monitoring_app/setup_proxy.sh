@@ -23,3 +23,5 @@ else
     echo "Continue installing without internet proxy..."
     # git config --global --unset http.proxy
 fi
+echo -e "${YELLOW}Current git proxy configuration:${RESET}"
+git config --global --get http.proxy
