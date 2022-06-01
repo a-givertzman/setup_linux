@@ -41,6 +41,17 @@ fi
 
 sudo apt update
 
+echo "\n\ninstalling MySQL Server..." 
+cd /tmp/
+mySqlPackege="mysql-apt-config_0.8.22-1_all.deb"
+wget "https://dev.mysql.com/get/$mySqlPackege"
+sudo dpkg -i $mySqlPackege
+#rm -f $mySqlPackege
+sudo apt update
+sudo apt-get install mysql-server
+#sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+#bind-address=127.0.0.1
+systemctl restart mysql
 # sudo apt install gnome-control-center
 
 mkdir ~/developer
