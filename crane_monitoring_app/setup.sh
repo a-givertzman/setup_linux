@@ -41,6 +41,22 @@ fi
 
 sudo apt update
 
+read -p "Install python ? 0 - no, 1 - yes: " installpython
+if [ $installpython == 0 ]; then
+  echo "Cntinue without installing python"
+else
+  echo "\n\ninstalling puthon not implemented yet!!!" 
+fi
+
+read -p "Install python pip ? 0 - no, 1 - yes: " installpythonPip
+if [ $installpythonPip == 0 ]; then
+  echo "Cntinue without installing python pip"
+else
+  echo "\n\ninstalling puthon pip"
+  sudo apt update 
+  sudo apt install python3-pip
+fi
+
 read -p "Install Mysql? 0 - no, 1 - yes: " installMysql
 if [ $installMysql == 0 ]; then
   echo "Cntinue without installing MySQL"
@@ -104,22 +120,6 @@ else
   sudo apt update
   sudo apt install clang cmake ninja-build libgtk-3-dev
   flutter doctor -v
-fi
-
-read -p "Install python ? 0 - no, 1 - yes: " installpython
-if [ $installpython == 0 ]; then
-  echo "Cntinue without installing python"
-else
-  echo "\n\ninstalling puthon not implemented yet!!!" 
-fi
-
-read -p "Install python pip ? 0 - no, 1 - yes: " installpythonPip
-if [ $installpythonPip == 0 ]; then
-  echo "Cntinue without installing python pip"
-else
-  echo "\n\ninstalling puthon pip"
-  sudo apt update 
-  sudo apt install python3-pip
 fi
 
 #ssh-keygen -t ed25519 -C a.givertzman@icloud.com
