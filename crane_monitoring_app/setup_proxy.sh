@@ -2,7 +2,8 @@
 
 ##########################################
 # setup proxy configuration
-useProxy="${GREEN}Setup proxy configuration?:\0 - no\1 - yes\${RESET}> "
+read -p "${GREEN}Setup proxy configuration?:\0 - no\1 - yes\${RESET}> " useProxy
+
 if [[ $useProxy == 0  ]]; then
     echo "Continue installing without internet proxy..."
     git config --global --unset http.proxy
