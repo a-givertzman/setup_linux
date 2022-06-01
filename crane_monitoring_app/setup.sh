@@ -79,7 +79,7 @@ if [ $installMysqlConnector == 0 ]; then
   echo "Cntinue without installing mysql-connector-python"
 else
   echo "\n\ninstalling mysql-connector-python" 
-  python3 pip install mysql-connector-python
+  python3 -m pip install mysql-connector-python
 fi
 
 # sudo apt install gnome-control-center
