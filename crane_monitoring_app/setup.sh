@@ -46,7 +46,7 @@ sudo apt update
 mkdir ~/developer
 mkdir ~/developer/flutter-proj
 mkdir ~/developer/python-proj
-cd developer/
+cd ~/developer/
 
 sudo apt update && sudo apt install git
 sudo apt-get install curl
@@ -77,16 +77,16 @@ cd ~/developer/python-proj/
 rm -r -f ~/developer/python-proj/s7-data-server 
 git clone git@github.com:a-givertzman/s7-data-server.git -b master 
 
-echo "\nstarting up python server application api_server..." 
-python3 ~/developer/python-proj/s7-data-server/api_server.py
-echo "\nstarting up python server application socket_data_server..." 
-python3 ~/developer/python-proj/s7-data-server/socket_data_server_test.py
-
 echo "\n\ninstalling dart/flutter client application crane_monitoring_app"
 cd ~/developer/flutter-proj/
 rm -r -f ~/developer/flutter-proj/crane_monitoring_app
 #git clone git@github.com:a-givertzman/crane_monitoring_app.git -b TextStatusIndicator
 git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
+
+echo "\nstarting up python server application api_server..." 
+python3 ~/developer/python-proj/s7-data-server/api_server.py
+echo "\nstarting up python server application socket_data_server..." 
+python3 ~/developer/python-proj/s7-data-server/socket_data_server_test.py
 
 cd ~/developer/flutter-proj/crane_monitoring_app/
 flutter upgrade
