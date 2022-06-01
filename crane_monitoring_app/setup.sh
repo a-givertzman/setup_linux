@@ -71,8 +71,13 @@ flutter doctor -v
 
 #ssh -T git@github.com
 
-cd ~/developer/flutter-proj/
+echo "installing python server application s7-data-server"
+cd ~/developer/python-proj/
+rm -r ~/developer/flutter-proj/s7-data-server
+git clone git@github.com:a-givertzman/s7-data-server.git -b master
 
+echo "installing dart/flutter client application crane_monitoring_app"
+cd ~/developer/flutter-proj/
 rm -r ~/developer/flutter-proj/crane_monitoring_app
 git clone git@github.com:a-givertzman/crane_monitoring_app.git -b TextStatusIndicator
 #git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
