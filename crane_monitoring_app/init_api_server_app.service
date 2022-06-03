@@ -1,0 +1,8 @@
+[Unit]
+Description=conigure and run scada api_server application
+After=syslog.target network.target multi-user.target
+[Service]
+Type=simple
+ExecStart=/home/scada/app/init_api_server_app.sh
+[Install]
+WantedBy=scada-app.target
