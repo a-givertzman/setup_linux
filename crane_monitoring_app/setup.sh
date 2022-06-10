@@ -143,8 +143,8 @@ git clone git@github.com:a-givertzman/s7-data-server.git -b ied-reading-in-threa
 echo "\n\ninstalling dart/flutter client application crane_monitoring_app"
 cd ~/developer/flutter-proj/
 rm -r -f ~/developer/flutter-proj/crane_monitoring_app
-#git clone git@github.com:a-givertzman/crane_monitoring_app.git -b TextStatusIndicator
-git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
+git clone git@github.com:a-givertzman/crane_monitoring_app.git -b HomePage
+#git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
 
 echo "\nstarting up python server application api_server..." 
 gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/developer/python-proj/s7-data-server/api_server.py"
