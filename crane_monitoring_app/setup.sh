@@ -125,9 +125,14 @@ fi
 #ssh-keygen -t ed25519 -C a.givertzman@icloud.com
 #eval "$(ssh-agent -s)"
 #ssh-add ~/.ssh/id_ed25519
-3cat ~/.ssh/id_ed25519.pub
 
-#ssh -T git@github.com
+echo
+echo "there is allready installed ssh-key:"
+cat ~/.ssh/id_ed25519.pub
+
+echo
+echo "testing ssh connection to the github.com..."
+ssh -T git@github.com
 
 
 echo "\n\ninstalling python server application s7-data-server..." 
