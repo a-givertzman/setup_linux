@@ -76,18 +76,26 @@ fi
 
 read -p "Install python mysql.connector? 0 - no, 1 - yes: " installMysqlConnector
 if [ $installMysqlConnector == 0 ]; then
-  echo "Cntinue without installing mysql-connector-python"
+  echo -e "Cntinue without installing mysql-connector-python"
 else
-  echo "\n\ninstalling mysql-connector-python" 
+  echo -e "\n\ninstalling mysql-connector-python" 
   python3 -m pip install mysql-connector-python
+fi
+
+read -p "Install python-snap7 lib? 0 - no, 1 - yes: " installPythonSnap7
+if [ $installPythonSnap7 == 0 ]; then
+  echo "Cntinue without installing python-snap7"
+else
+  echo -e "\n\ninstalling python-snap7" 
+  python3 -m pip install python-snap7
 fi
 
 # sudo apt install gnome-control-center
 
-mkdir ~/developer
-mkdir ~/developer/flutter-proj
-mkdir ~/developer/python-proj
-cd ~/developer/
+mkdir ~/app
+mkdir ~/app/flutter-proj
+mkdir ~/app/python-proj
+cd ~/app/
 
 read -p "Install git ? 0 - no, 1 - yes: " installGit
 if [ $installGit == 0 ]; then
@@ -126,7 +134,7 @@ if [ $installflutter == 0 ]; then
 else
   echo "\n\ninstalling flutter" 
   git clone https://github.com/flutter/flutter.git -b stable
-  export PATH="$PATH:~/developer/flutter/bin"
+  export PATH="$PATH:~/app/flutter/bin"
   which flutter dart
   sudo apt update
   sudo apt install clang cmake ninja-build libgtk-3-dev
@@ -147,22 +155,22 @@ ssh -T git@github.com
 
 
 echo "\n\ninstalling python server application s7-data-server..." 
-cd ~/developer/python-proj/ 
-rm -r -f ~/developer/python-proj/s7-data-server 
+cd ~/app/python-proj/ 
+rm -r -f ~/app/python-proj/s7-data-server 
 git clone git@github.com:a-givertzman/s7-data-server.git -b ied-reading-in-thread 
 
 echo "\n\ninstalling dart/flutter client application crane_monitoring_app"
-cd ~/developer/flutter-proj/
-rm -r -f ~/developer/flutter-proj/crane_monitoring_app
+cd ~/app/flutter-proj/
+rm -r -f ~/app/flutter-proj/crane_monitoring_app
 git clone git@github.com:a-givertzman/crane_monitoring_app.git -b HomePage
 #git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
 
 echo "\nstarting up python server application api_server..." 
-gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/developer/python-proj/s7-data-server/api_server.py"
+gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/app/python-proj/s7-data-server/api_server.py"
 echo "\nstarting up python server application socket_data_server..." 
-gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/developer/python-proj/s7-data-server/socket_data_server_test.py"
+gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/app/python-proj/s7-data-server/socket_data_server_test.py"
 
-cd ~/developer/flutter-proj/crane_monitoring_app/
+cd ~/app/flutter-proj/crane_monitoring_app/
 flutter upgrade
 flutter config --enable-linux-desktop
 flutter devices
