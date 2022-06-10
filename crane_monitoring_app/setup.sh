@@ -3,11 +3,11 @@
 testSudo() {
   printf "mypassword\n" | sudo -S /bin/chmod --help >/dev/null 2>&1
   if [ $? -eq 0 ];then
-     echo "User $(whoami) has sudo access!"
+     echo -e "User $(whoami) has sudo access!"
      return 0
   else
-     echo "User $(whoami) has no sudo access"
-     echo "will try to grant sudo..."
+     echo -e "User $(whoami) has no sudo access"
+     echo -e "will try to grant sudo..."
      return 1
   fi
 }
@@ -19,7 +19,7 @@ if [ hasSudo ]; then
   # uncomment following string in /etc/sudoers
   #%sudo  ALL=(ALL:ALL) ALL
   read -p 'Enter root password:' password
-  echo $password | \
+  echo -e $password | \
     su -c "sudo sed --in-place '/^#\s*%sudo\s\+ALL\s*=\s*(/s/^#//g' /etc/sudoers"
 
   read -p "Enter user name, to add to sudo (defoult $(whoami)): " userName
@@ -31,37 +31,41 @@ if [ hasSudo ]; then
   userId=$(id -u $userName)
 
   if [ $userId ]; then
-    echo "user found, id = $userId [$userName]"
-    echo $password | su -c "sudo usermod -a -G sudo $userName"
+    echo -e "user found, id = $userId [$userName]"
+    echo -e $password | su -c "sudo usermod -a -G sudo $userName"
   else
-    echo 'user not found, id = $userId [$userName]'
-    echo $password | su -c "sudo useradd -g sudo $userName"
+    echo -e 'user not found, id = $userId [$userName]'
+    echo -e $password | su -c "sudo useradd -g sudo $userName"
   fi
 fi
 
+echo -e "\nUpdating apt-get..."
 sudo apt update
 
+echo
 read -p "Install python ? 0 - no, 1 - yes: " installpython
 if [ $installpython == 0 ]; then
-  echo "Cntinue without installing python"
+  echo -e "Cntinue without installing python"
 else
-  echo "\n\ninstalling puthon not implemented yet!!!" 
+  echo -e "\n\ninstalling puthon not implemented yet!!!" 
 fi
 
+echo
 read -p "Install python pip ? 0 - no, 1 - yes: " installpythonPip
 if [ $installpythonPip == 0 ]; then
-  echo "Cntinue without installing python pip"
+  echo -e "Cntinue without installing python pip"
 else
-  echo "\n\ninstalling puthon pip"
+  echo -e "\n\ninstalling puthon pip"
   sudo apt update 
   sudo apt install python3-pip
 fi
 
+echo
 read -p "Install Mysql? 0 - no, 1 - yes: " installMysql
 if [ $installMysql == 0 ]; then
-  echo "Cntinue without installing MySQL"
+  echo -e "Cntinue without installing MySQL"
 else
-  echo "\n\nInstalling MySQL Server..." 
+  echo -e "\n\nInstalling MySQL Server..." 
   cd /tmp/
   mySqlPackege="mysql-apt-config_0.8.22-1_all.deb"
   wget "https://dev.mysql.com/get/$mySqlPackege"
@@ -74,6 +78,7 @@ else
   systemctl restart mysql
 fi
 
+echo
 read -p "Install python mysql.connector? 0 - no, 1 - yes: " installMysqlConnector
 if [ $installMysqlConnector == 0 ]; then
   echo -e "Cntinue without installing mysql-connector-python"
@@ -82,9 +87,10 @@ else
   python3 -m pip install mysql-connector-python
 fi
 
+echo
 read -p "Install python-snap7 lib? 0 - no, 1 - yes: " installPythonSnap7
 if [ $installPythonSnap7 == 0 ]; then
-  echo "Cntinue without installing python-snap7"
+  echo -e "Cntinue without installing python-snap7"
 else
   echo -e "\n\ninstalling python-snap7" 
   python3 -m pip install python-snap7
@@ -92,30 +98,28 @@ fi
 
 # sudo apt install gnome-control-center
 
-mkdir ~/app
-mkdir ~/app/flutter-proj
-mkdir ~/app/python-proj
-cd ~/app/
-
+echo
 read -p "Install git ? 0 - no, 1 - yes: " installGit
 if [ $installGit == 0 ]; then
-  echo "Cntinue without installing git"
+  echo -e "Cntinue without installing git"
 else
   echo -e "\n\ninstalling git" 
   sudo apt update && sudo apt install git
 fi
 
-read -p "Install curl ? 0 - no, 1 - yes: " installGit
-if [ $installGit == 0 ]; then
-  echo "Cntinue without installing curl"
+echo
+read -p "Install curl ? 0 - no, 1 - yes: " installCurl
+if [ $installCurl == 0 ]; then
+  echo -e "Cntinue without installing curl"
 else
   echo -e "\n\ninstalling curl" 
-  sudo apt-get install curl
+  sudo apt update && sudo apt install curl
 fi
 
+echo
 read -p "Install dart ? 0 - no, 1 - yes: " installDart
 if [ $installDart == 0 ]; then
-  echo "Cntinue without installing dart"
+  echo -e "Cntinue without installing dart"
 else
   echo -e "\n\ninstalling dart" 
   sudo apt-get update
@@ -128,11 +132,12 @@ else
   dart --version
 fi
 
+echo
 read -p "Install flutter & curl ? 0 - no, 1 - yes: " installflutter
 if [ $installflutter == 0 ]; then
-  echo "Cntinue without installing flutter"
+  echo -e "Cntinue without installing flutter"
 else
-  echo "\n\ninstalling flutter" 
+  echo -e "\n\ninstalling flutter" 
   git clone https://github.com/flutter/flutter.git -b stable
   export PATH="$PATH:~/app/flutter/bin"
   which flutter dart
@@ -145,29 +150,33 @@ fi
 #eval "$(ssh-agent -s)"
 #ssh-add ~/.ssh/id_ed25519
 
-echo
-echo "there is allready installed ssh-key:"
+echo -e "\nthere is allready installed ssh-key:"
 cat ~/.ssh/id_ed25519.pub
 
-echo
-echo "testing ssh connection to the github.com..."
+echo -e "\ntesting ssh connection to the github.com..."
 ssh -T git@github.com
 
 
-echo "\n\ninstalling python server application s7-data-server..." 
+mkdir -p ~/app
+mkdir -p ~/app/flutter-proj
+mkdir -p ~/app/python-proj
+cd ~/app/
+
+
+echo -e "\n\ninstalling python server application s7-data-server..." 
 cd ~/app/python-proj/ 
 rm -r -f ~/app/python-proj/s7-data-server 
 git clone git@github.com:a-givertzman/s7-data-server.git -b ied-reading-in-thread 
 
-echo "\n\ninstalling dart/flutter client application crane_monitoring_app"
+echo -e "\n\ninstalling dart/flutter client application crane_monitoring_app"
 cd ~/app/flutter-proj/
 rm -r -f ~/app/flutter-proj/crane_monitoring_app
 git clone git@github.com:a-givertzman/crane_monitoring_app.git -b HomePage
 #git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
 
-echo "\nstarting up python server application api_server..." 
+echo -e "\nstarting up python server application api_server..." 
 gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/app/python-proj/s7-data-server/api_server.py"
-echo "\nstarting up python server application socket_data_server..." 
+echo -e "\nstarting up python server application socket_data_server..." 
 gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/app/python-proj/s7-data-server/socket_data_server_test.py"
 
 cd ~/app/flutter-proj/crane_monitoring_app/
