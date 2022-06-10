@@ -138,14 +138,13 @@ else
   dart --version
 fi
 
-cd ~/flutter/
-
 echo
 read -p "Install flutter & curl ? 0 - no, 1 - yes: " installflutter
 if [ $installflutter == 0 ]; then
   echo -e "Cntinue without installing flutter"
 else
   echo -e "\n\ninstalling flutter" 
+  cd ~/flutter/
   git clone https://github.com/flutter/flutter.git -b stable
   export PATH="$PATH:~/app/flutter/bin"
   which flutter dart
