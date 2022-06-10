@@ -89,21 +89,32 @@ mkdir ~/developer/flutter-proj
 mkdir ~/developer/python-proj
 cd ~/developer/
 
-read -p "Install git & curl ? 0 - no, 1 - yes: " installGit
+read -p "Install git ? 0 - no, 1 - yes: " installGit
 if [ $installGit == 0 ]; then
-  echo "Cntinue without installing mysql-connector-python"
+  echo "Cntinue without installing git"
 else
-  echo "\n\ninstalling git" 
+  echo -e "\n\ninstalling git" 
   sudo apt update && sudo apt install git
-  echo "\n\ninstalling curl" 
+fi
+
+read -p "Install curl ? 0 - no, 1 - yes: " installGit
+if [ $installGit == 0 ]; then
+  echo "Cntinue without installing curl"
+else
+  echo -e "\n\ninstalling curl" 
   sudo apt-get install curl
 fi
 
-read -p "Install dart & curl ? 0 - no, 1 - yes: " installDart
+read -p "Install dart ? 0 - no, 1 - yes: " installDart
 if [ $installDart == 0 ]; then
   echo "Cntinue without installing dart"
 else
-  echo "\n\ninstalling dart" 
+  echo -e "\n\ninstalling dart" 
+  sudo apt-get update
+  sudo apt-get install apt-transport-https
+  wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/dart.gpg
+  echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' | sudo tee /etc/apt/sources.list.d/dart_stable.list
+  sudo apt-get update
   sudo apt install dart
   dart --disable-analytics
   dart --version
