@@ -146,7 +146,7 @@ else
   echo -e "\n\ninstalling flutter" 
   cd ~/flutter/
   git clone https://github.com/flutter/flutter.git -b stable
-  export PATH="$PATH:~/app/flutter/bin"
+  export PATH="$PATH:~/flutter/flutter/bin"
   which flutter dart
   sudo apt update
   sudo apt install clang cmake ninja-build libgtk-3-dev
