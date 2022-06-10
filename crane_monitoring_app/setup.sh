@@ -39,6 +39,11 @@ if [ hasSudo ]; then
   fi
 fi
 
+mkdir -p ~/flutter
+mkdir -p ~/app
+mkdir -p ~/app/flutter-proj
+mkdir -p ~/app/python-proj
+
 echo -e "\nUpdating apt-get..."
 sudo apt update
 
@@ -116,6 +121,7 @@ else
   sudo apt update && sudo apt install curl
 fi
 
+
 echo
 read -p "Install dart ? 0 - no, 1 - yes: " installDart
 if [ $installDart == 0 ]; then
@@ -131,6 +137,8 @@ else
   dart --disable-analytics
   dart --version
 fi
+
+cd ~/flutter/
 
 echo
 read -p "Install flutter & curl ? 0 - no, 1 - yes: " installflutter
@@ -157,9 +165,6 @@ echo -e "\ntesting ssh connection to the github.com..."
 ssh -T git@github.com
 
 
-mkdir -p ~/app
-mkdir -p ~/app/flutter-proj
-mkdir -p ~/app/python-proj
 cd ~/app/
 
 
