@@ -59,17 +59,19 @@ echo
 read -p "Install python pip ? 0 - no, 1 - yes: " installpythonPip
 if [ $installpythonPip == 0 ]; then
   echo -e "Cntinue without installing python pip"
-else
+elif [ $installpythonPip == 1 ]; then
   echo -e "\n\ninstalling puthon pip"
   sudo apt update 
   sudo apt install python3-pip
+else
+  echo -e "Cntinue without installing python pip"
 fi
 
 echo
 read -p "Install Mysql? 0 - no, 1 - yes: " installMysql
 if [ $installMysql == 0 ]; then
   echo -e "Cntinue without installing MySQL"
-else
+elif [ $installMysql == 1 ]; then
   echo -e "\n\nInstalling MySQL Server..." 
   cd /tmp/
   mySqlPackege="mysql-apt-config_0.8.22-1_all.deb"
@@ -81,24 +83,30 @@ else
   #sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
   #bind-address=127.0.0.1
   systemctl restart mysql
+else
+  echo -e "Cntinue without installing MySQL"
 fi
 
 echo
 read -p "Install python mysql.connector? 0 - no, 1 - yes: " installMysqlConnector
 if [ $installMysqlConnector == 0 ]; then
   echo -e "Cntinue without installing mysql-connector-python"
-else
+elif [ $installMysqlConnector == 1 ]; then
   echo -e "\n\ninstalling mysql-connector-python" 
   python3 -m pip install mysql-connector-python
+else
+  echo -e "Cntinue without installing mysql-connector-python"
 fi
 
 echo
 read -p "Install python-snap7 lib? 0 - no, 1 - yes: " installPythonSnap7
 if [ $installPythonSnap7 == 0 ]; then
   echo -e "Cntinue without installing python-snap7"
-else
+elif [ $installPythonSnap7 == 1 ]; then
   echo -e "\n\ninstalling python-snap7" 
   python3 -m pip install python-snap7
+else
+  echo -e "Cntinue without installing python-snap7"
 fi
 
 # sudo apt install gnome-control-center
@@ -107,9 +115,11 @@ echo
 read -p "Install git ? 0 - no, 1 - yes: " installGit
 if [ $installGit == 0 ]; then
   echo -e "Cntinue without installing git"
-else
+elif [ $installGit == 1 ]; then
   echo -e "\n\ninstalling git" 
   sudo apt update && sudo apt install git
+else
+  echo -e "Cntinue without installing git"
 fi
 
 echo
@@ -126,7 +136,7 @@ echo
 read -p "Install dart ? 0 - no, 1 - yes: " installDart
 if [ $installDart == 0 ]; then
   echo -e "Cntinue without installing dart"
-else
+elif [ $installDart == 1 ]; then
   echo -e "\n\ninstalling dart" 
   sudo apt-get update
   sudo apt-get install apt-transport-https
@@ -136,6 +146,8 @@ else
   sudo apt install dart
   dart --disable-analytics
   dart --version
+else
+  echo -e "Cntinue without installing dart"
 fi
 
 echo
@@ -196,7 +208,22 @@ flutter doctor
 flutter clean
 flutter pub upgrade
 flutter create --platforms=macos,linux ./
-flutter run -d linux
-#flutter build linux
+
+echo
+read -p "run flutter application? 0 - no, 1 - run debug, 2 - run release, 3 - jast duild: " buildFlutterApp
+if [ $buildFlutterApp == 0 ]; then
+  echo -e "Cntinue without installing flutter"
+elif [ $buildFlutterApp == 1 ]; then
+  echo -e "\n\nrunning flutter application in the debug mode..." 
+  flutter run -d linux
+elif [ $buildFlutterApp == 2 ]; then
+  echo -e "\n\nrunning flutter application in the release mode..." 
+  flutter build linux
+elif [ $buildFlutterApp == 3 ]; then
+  echo -e "\n\nbulding flutter application..." 
+  flutter build linux
+else
+  echo -e "exit without running/building flutter application"
+fi
 
 exit 0
