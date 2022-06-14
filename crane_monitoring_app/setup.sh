@@ -99,6 +99,17 @@ else
 fi
 
 echo
+read -p "Install python-numpy lib? 0 - no, 1 - yes: " installPythonNumpy
+if [ $installPythonNumpy == 0 ]; then
+  echo -e "Cntinue without installing python numpy"
+elif [ $installPythonNumpy == 1 ]; then
+  echo -e "\n\ninstalling python numpy" 
+  python3 -m pip install numpy
+else
+  echo -e "Cntinue without installing python numpy"
+fi
+
+echo
 read -p "Install python-snap7 lib? 0 - no, 1 - yes: " installPythonSnap7
 if [ $installPythonSnap7 == 0 ]; then
   echo -e "Cntinue without installing python-snap7"
