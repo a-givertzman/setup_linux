@@ -139,10 +139,10 @@ else
 fi
 
 echo
-read -p "Install flutter & curl ? 0 - no, 1 - yes: " installflutter
+read -p "Install flutter? 0 - no, 1 - install, 2 - upgrade: " installflutter
 if [ $installflutter == 0 ]; then
   echo -e "Cntinue without installing flutter"
-else
+elif [ $installflutter == 1 ]; then
   echo -e "\n\ninstalling flutter" 
   cd ~/flutter/
   git clone https://github.com/flutter/flutter.git -b stable
@@ -151,6 +151,12 @@ else
   sudo apt update
   sudo apt install clang cmake ninja-build libgtk-3-dev
   flutter doctor -v
+elif [ $installflutter == 2 ]; then
+  echo -e "\n\nupgrading flutter" 
+  flutter upgrade
+  flutter doctor -v
+else
+  echo -e "Cntinue without installing flutter"
 fi
 
 #ssh-keygen -t ed25519 -C a.givertzman@icloud.com
@@ -184,7 +190,6 @@ git clone git@github.com:a-givertzman/crane_monitoring_app.git -b HomePage
 #gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/app/python-proj/s7-data-server/socket_data_server_test.py"
 
 cd ~/app/flutter-proj/crane_monitoring_app/
-flutter upgrade
 flutter config --enable-linux-desktop
 flutter devices
 flutter doctor
