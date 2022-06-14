@@ -48,18 +48,18 @@ echo -e "\nUpdating apt-get..."
 sudo apt update
 
 echo
-read -p "Install python ? 0 - no, 1 - yes: " installpython
-if [ $installpython == 0 ]; then
+read -p "Install python ? 0 - no, 1 - yes: " installPython
+if [ $installPython == 0 ]; then
   echo -e "Cntinue without installing python"
 else
   echo -e "\n\ninstalling puthon not implemented yet!!!" 
 fi
 
 echo
-read -p "Install python pip ? 0 - no, 1 - yes: " installpythonPip
-if [ $installpythonPip == 0 ]; then
+read -p "Install python pip ? 0 - no, 1 - yes: " installPythonPip
+if [ $installPythonPip == 0 ]; then
   echo -e "Cntinue without installing python pip"
-elif [ $installpythonPip == 1 ]; then
+elif [ $installPythonPip == 1 ]; then
   echo -e "\n\ninstalling puthon pip"
   sudo apt update 
   sudo apt install python3-pip
@@ -161,11 +161,12 @@ else
   echo -e "Cntinue without installing dart"
 fi
 
+
 echo
-read -p "Install flutter? 0 - no, 1 - install, 2 - upgrade: " installflutter
-if [ $installflutter == 0 ]; then
+read -p "Install flutter? 0 - no, 1 - install, 2 - upgrade: " installFlutter
+if [ $installFlutter == 0 ]; then
   echo -e "Cntinue without installing flutter"
-elif [ $installflutter == 1 ]; then
+elif [ $installFlutter == 1 ]; then
   echo -e "\n\ninstalling flutter" 
   cd ~/flutter/
   git clone https://github.com/flutter/flutter.git -b stable
@@ -174,7 +175,7 @@ elif [ $installflutter == 1 ]; then
   sudo apt update
   sudo apt install clang cmake ninja-build libgtk-3-dev
   flutter doctor -v
-elif [ $installflutter == 2 ]; then
+elif [ $installFlutter == 2 ]; then
   echo -e "\n\nupgrading flutter" 
   flutter upgrade
   flutter doctor -v
