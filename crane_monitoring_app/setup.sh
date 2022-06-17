@@ -205,7 +205,7 @@ git clone git@github.com:a-givertzman/s7-data-server.git -b ied-reading-in-threa
 echo -e "\n\ninstalling dart/flutter client application crane_monitoring_app"
 cd ~/app/flutter-proj/
 rm -r -f ~/app/flutter-proj/crane_monitoring_app
-git clone git@github.com:a-givertzman/crane_monitoring_app.git -b HomePage
+git clone git@github.com:a-givertzman/crane_monitoring_app.git -b MainPage
 #git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
 
 #echo -e "\nstarting up python server application api_server..." 
