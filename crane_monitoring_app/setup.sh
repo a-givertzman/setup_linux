@@ -182,7 +182,7 @@ elif [ $installFlutter == 2 ]; then
 else
   echo -e "Cntinue without installing flutter"
 fi
-
+export PATH="$PATH:~/flutter/flutter/bin"
 #ssh-keygen -t ed25519 -C a.givertzman@icloud.com
 #eval "$(ssh-agent -s)"
 #ssh-add ~/.ssh/id_ed25519
