@@ -200,12 +200,12 @@ cd ~/app/
 echo -e "\n\ninstalling python server application s7-data-server..." 
 cd ~/app/python-proj/ 
 rm -r -f ~/app/python-proj/s7-data-server 
-git clone git@github.com:a-givertzman/s7-data-server.git -b ied-reading-in-thread 
+git clone git@github.com:a-givertzman/s7-data-server.git -b master
 
 echo -e "\n\ninstalling dart/flutter client application crane_monitoring_app"
 cd ~/app/flutter-proj/
 rm -r -f ~/app/flutter-proj/crane_monitoring_app
-git clone git@github.com:a-givertzman/crane_monitoring_app.git -b ExhibitPage
+git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
 #git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
 
 #echo -e "\nstarting up python server application api_server..." 
