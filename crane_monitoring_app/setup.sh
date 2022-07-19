@@ -197,16 +197,34 @@ ssh -T git@github.com
 cd ~/app/
 
 
-echo -e "\n\ninstalling python server application s7-data-server..." 
-cd ~/app/python-proj/ 
-rm -r -f ~/app/python-proj/s7-data-server 
-git clone git@github.com:a-givertzman/s7-data-server.git -b master
+echo
+read -p "Install s7-data-server? 0 - no, 1 - install: " s7DataServer
+if [ $s7DataServer == 0 ]; then
+  echo -e "Cntinue without installing s7-data-server"
+elif [ $s7DataServer == 1 ]; then
+  echo -e "\n\ninstalling python server application s7-data-server..." 
+  cd ~/app/python-proj/ 
+  rm -r -f ~/app/python-proj/s7-data-server 
+  git clone git@github.com:a-givertzman/s7-data-server.git -b master
+else
+  echo -e "Cntinue without installing s7-data-server"
+fi
 
-echo -e "\n\ninstalling dart/flutter client application crane_monitoring_app"
-cd ~/app/flutter-proj/
-rm -r -f ~/app/flutter-proj/crane_monitoring_app
-git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
-#git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
+
+echo
+read -p "Install crane_monitoring_app? 0 - no, 1 - install: " craneMonitoringApp
+if [ $craneMonitoringApp == 0 ]; then
+  echo -e "Cntinue without installing crane_monitoring_app"
+elif [ $craneMonitoringApp == 1 ]; then
+  echo -e "\n\ninstalling dart/flutter client application crane_monitoring_app"
+  cd ~/app/flutter-proj/
+  rm -r -f ~/app/flutter-proj/crane_monitoring_app
+  git clone git@github.com:a-givertzman/crane_monitoring_app.git -b master
+else
+  echo -e "Cntinue without installing crane_monitoring_app"
+fi
+
+cd ~/app/
 
 #echo -e "\nstarting up python server application api_server..." 
 #gnome-terminal --tab --title="socket_data_server_test" --command="python3 ~/app/python-proj/s7-data-server/api_server.py"
