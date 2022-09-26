@@ -4,7 +4,7 @@ PartOf=graphical-session.target
 
 [Service]
 User=scada
-Type=oneshot
+Type=simple
 TimeoutStartSec="1s"
 Restart=always
 RestartSec="1s"
