@@ -6,7 +6,7 @@ PartOf=graphical-session.target
 User=scada
 Type=oneshot
 TimeoutStartSec="1s"
-Restart=always
+Restart=on-watchdog
 RestartSec="1s"
 Environment="DISPLAY=:0"
 WorkingDirectory=/home/scada/app/internal_v0.0.20/
