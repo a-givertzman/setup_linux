@@ -20,8 +20,8 @@ sudo systemctl disabled configure_ui.service
 sudo systemctl disabled scada_app.service
 
 # create ui configuration script
-sudo cp ./configure_ui.sh /home/app/configure_ui.sh
-sudo chmod +x /home/app/configure_ui.sh
+sudo cp ./configure_ui.sh /home/scada/app/configure_ui.sh
+sudo chmod +x /home/scada/app/configure_ui.sh
 
 
 #create service
