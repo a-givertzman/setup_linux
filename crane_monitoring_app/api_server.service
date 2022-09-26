@@ -1,6 +1,6 @@
 [Unit]
 Description=Run scada api_server application
-After=syslog.target network.target multi-user.target
+After=syslog.target network.target multi-user.target mysql.service
 
 [Service]
 User=scada
