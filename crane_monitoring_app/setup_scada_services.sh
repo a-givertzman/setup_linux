@@ -11,9 +11,11 @@
 #stoping and disabling services if exists
 sudo systemctl stop api_server.service
 sudo systemctl stop data_server.service
+sudo systemctl stop scada_app.service
 
 sudo systemctl disabled api_server.service
 sudo systemctl disabled data_server.service
+sudo systemctl disabled scada_app.service
 
 #create service
 sudo cp ./api_server.service /etc/systemd/system/api_server.service
