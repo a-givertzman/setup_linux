@@ -5,7 +5,8 @@ PartOf=graphical-session.target
 [Service]
 User=scada
 Type=oneshot
-Restart=no
+Restart=on-failure
+RestartSec=1s
 Environment="DISPLAY=:0"
 ExecStart=/home/scada/app/configure_ui.sh
 
