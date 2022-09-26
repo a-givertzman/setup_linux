@@ -3,6 +3,7 @@ Description=conigure and run scada api_server application
 After=syslog.target network.target multi-user.target
 
 [Service]
+User=scada
 Type=simple
 Restart=no
 WorkingDirectory=/home/scada/app/python-proj/s7-data-server/
