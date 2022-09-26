@@ -5,8 +5,9 @@ PartOf=graphical-session.target
 [Service]
 User=scada
 Type=oneshot
+TimeoutStartSec="1s"
 Restart=always
-RestartSec=1s
+RestartSec="1s"
 Environment="DISPLAY=:0"
 WorkingDirectory=/home/scada/app/internal_v0.0.20/
 ExecStart=/home/scada/app/internal_v0.0.20/crane_monitoring_app

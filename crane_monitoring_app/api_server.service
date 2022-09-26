@@ -6,7 +6,7 @@ After=syslog.target network.target multi-user.target
 User=scada
 Type=simple
 Restart=always
-RestartSec=1s
+RestartSec="1s"
 WorkingDirectory=/home/scada/app/python-proj/s7-data-server/
 ExecStart=/usr/bin/python3 /home/scada/app/python-proj/s7-data-server/api_server.py
 
