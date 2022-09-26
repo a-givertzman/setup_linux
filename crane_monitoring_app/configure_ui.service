@@ -1,0 +1,12 @@
+[Unit]
+Description=conigure GUI for scada monitoring application
+BindsTo=graphical-session.target
+
+[Service]
+User=scada
+Type=simple
+Restart=no
+ExecStart=/home/scada/app/configure_ui.sh
+
+[Install]
+WantedBy=multi-user.target
