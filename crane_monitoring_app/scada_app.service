@@ -6,6 +6,7 @@ PartOf=graphical-session.target
 User=scada
 Type=oneshot
 TimeoutStartSec="1s"
+WatchdogSec="3s"
 Restart=on-watchdog
 RestartSec="1s"
 Environment="DISPLAY=:0"
