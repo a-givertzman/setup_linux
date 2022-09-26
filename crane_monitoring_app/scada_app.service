@@ -1,0 +1,13 @@
+[Unit]
+Description=conigure and run scada data_server application
+After=syslog.target network.target multi-user.target graphical.target
+
+[Service]
+User=scada
+Type=simple
+Restart=no
+WorkingDirectory=/home/scada/app/internal_v0.0.20/
+ExecStart=/home/scada/app/internal_v0.0.20/crane_monitoring_app
+
+[Install]
+WantedBy=multi-user.target
