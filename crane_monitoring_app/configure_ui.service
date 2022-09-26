@@ -1,6 +1,6 @@
 [Unit]
 Description=conigure GUI for scada monitoring application
-PartOf=graphical-session.target
+PartOf=graphical.target
 
 [Service]
 User=scada
@@ -12,4 +12,4 @@ Environment="DISPLAY=:0"
 ExecStart=/home/scada/app/configure_ui.sh
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=graphical.target
