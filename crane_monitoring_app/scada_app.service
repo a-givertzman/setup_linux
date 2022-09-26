@@ -5,7 +5,7 @@ PartOf=graphical.target
 [Service]
 User=scada
 Type=simple
-TimeoutStartSec=3
+TimeoutStartSec=5
 Restart=always
 RestartSec=1
 Environment="DISPLAY=:0"
