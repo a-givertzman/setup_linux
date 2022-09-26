@@ -1,6 +1,6 @@
 [Unit]
 Description=conigure and run scada monitoring application
-After=syslog.target network.target multi-user.target graphical-session.target
+PartOf=graphical-session.target
 
 [Service]
 User=scada
