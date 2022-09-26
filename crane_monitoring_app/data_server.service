@@ -1,0 +1,11 @@
+[Unit]
+Description=conigure and run scada data_server application
+After=syslog.target network.target multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart="python3 /home/scada/app/python-proj/s7-data-server/sds_run.py"
+
+[Install]
+WantedBy=multi-user.target

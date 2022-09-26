@@ -1,8 +1,11 @@
 [Unit]
 Description=conigure and run scada api_server application
 After=syslog.target network.target multi-user.target
+
 [Service]
 Type=simple
-ExecStart=/home/scada/app/init_api_server_app.sh
+Restart=always
+ExecStart=python3 /home/scada/app/python-proj/s7-data-server/api_server.py
+
 [Install]
-WantedBy=scada-app.target
+WantedBy=multi-user.target

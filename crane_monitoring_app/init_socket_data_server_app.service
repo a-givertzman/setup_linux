@@ -1,8 +1,0 @@
-[Unit]
-Description=conigure and run scada socket_data_server application
-After=syslog.target network.target multi-user.target
-[Service]
-Type=simple
-ExecStart=/home/scada/app/init_socket_data_server_app.sh
-[Install]
-WantedBy=scada-app.target
