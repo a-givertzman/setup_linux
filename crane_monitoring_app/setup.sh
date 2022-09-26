@@ -44,6 +44,18 @@ mkdir -p ~/app
 mkdir -p ~/app/flutter-proj
 mkdir -p ~/app/python-proj
 
+echo
+read -p "Setup auto login ? n - no, y - yes: " installAutologin
+if [ $installAutologin == 'n' ]; then
+  echo -e "Cntinue without installing auto login"
+else
+  echo -e "\n\ninstalling $userName auto login..." 
+  # /etc/gdm3/daemon.conf
+  # AutomaticLoginEnable=True
+  # AutomaticLogin=$userName
+  echo -e "\n\not implemented yet!" 
+fi
+
 echo -e "\nUpdating apt-get..."
 sudo apt update
 
@@ -53,6 +65,7 @@ if [ $installPython == 0 ]; then
   echo -e "Cntinue without installing python"
 else
   echo -e "\n\ninstalling puthon not implemented yet!!!" 
+  echo -e "\n\not implemented yet!" 
 fi
 
 echo
