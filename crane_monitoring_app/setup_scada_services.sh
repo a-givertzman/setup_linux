@@ -18,9 +18,11 @@ sudo systemctl disabled data_server.service
 #create service
 sudo cp ./api_server.service /etc/systemd/system/api_server.service
 sudo cp ./data_server.service /etc/systemd/system/data_server.service
+sudo cp ./scada_app.service /etc/systemd/system/scada_app.service
 
 sudo chmod +x /etc/systemd/system/api_server.service
 sudo chmod +x /etc/systemd/system/data_server.service
+sudo chmod +x /etc/systemd/system/scada_app.service
 
 
 #create links to the services
@@ -40,3 +42,6 @@ sudo systemctl start api_server.service
 
 sudo systemctl enable data_server.service
 sudo systemctl start data_server.service
+
+sudo systemctl enable scada_app.service
+sudo systemctl start scada_app.service
