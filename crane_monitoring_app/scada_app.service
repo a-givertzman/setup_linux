@@ -4,11 +4,11 @@ PartOf=graphical-session.target
 
 [Service]
 User=scada
-Type=simple
+Type=oneshot
 Restart=no
 Environment="DISPLAY=:0"
 WorkingDirectory=/home/scada/app/internal_v0.0.20/
 ExecStart=/home/scada/app/internal_v0.0.20/crane_monitoring_app
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical-session.target

@@ -4,9 +4,10 @@ PartOf=graphical-session.target
 
 [Service]
 User=scada
-Type=simple
+Type=oneshot
 Restart=no
+Environment="DISPLAY=:0"
 ExecStart=/home/scada/app/configure_ui.sh
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=graphical-session.target
