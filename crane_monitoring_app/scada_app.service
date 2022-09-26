@@ -7,7 +7,7 @@ PartOf=graphical.target
 [Service]
 User=scada
 Type=simple
-OnBootSec=3
+OnBootSec=1
 TimeoutStartSec=1
 Restart=always
 RestartSec=1
