@@ -6,6 +6,7 @@ PartOf=graphical-session.target
 User=scada
 Type=simple
 Restart=no
+Environment="DISPLAY=:0"
 WorkingDirectory=/home/scada/app/internal_v0.0.20/
 ExecStart=/home/scada/app/internal_v0.0.20/crane_monitoring_app
 
