@@ -1,6 +1,6 @@
 [Unit]
 Description=conigure GUI for scada monitoring application
-BindsTo=graphical-session.target
+PartOf=graphical-session.target
 
 [Service]
 User=scada
