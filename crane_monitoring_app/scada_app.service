@@ -1,5 +1,5 @@
 [Unit]
-Description=conigure and run scada monitoring application
+Description=Run scada monitoring application
 PartOf=graphical.target
 
 [Service]

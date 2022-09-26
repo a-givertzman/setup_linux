@@ -1,5 +1,5 @@
 [Unit]
-Description=conigure and run scada data_server application
+Description=Run scada data_server application
 After=syslog.target network.target multi-user.target
 
 [Service]
