@@ -1,6 +1,5 @@
 [Unit]
 Description=Run scada monitoring application
-PartOf=graphical.target
 
 [Service]
 User=scada

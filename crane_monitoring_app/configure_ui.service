@@ -1,6 +1,5 @@
 [Unit]
 Description=Conigure GUI for scada monitoring application
-PartOf=graphical.target
 
 [Service]
 User=scada
