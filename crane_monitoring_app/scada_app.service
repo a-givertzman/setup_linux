@@ -5,10 +5,11 @@ PartOf=graphical-session.target
 [Service]
 User=scada
 Type=simple
-TimeoutStartSec=1
+TimeoutStartSec=3
 Restart=always
-RestartSec="s
+RestartSec=1
 Environment="DISPLAY=:0"
+Environment="XAUTHORITY=/home/scada/.Xauthority"
 WorkingDirectory=/home/scada/app/internal_v0.0.20/
 ExecStart=/home/scada/app/internal_v0.0.20/crane_monitoring_app
 
