@@ -1,8 +1,8 @@
 [Unit]
 Description=Run scada monitoring application
 After=multi-user.target
-BindsTo=graphical-session.target
-PartOf=graphical-session.target
+BindsTo=graphical.target
+PartOf=graphical.target
 
 [Service]
 User=scada
