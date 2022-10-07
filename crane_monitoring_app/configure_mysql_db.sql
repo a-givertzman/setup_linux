@@ -118,7 +118,7 @@ CREATE TABLE `fault` (
   `cranemode_mops` TINYINT(1) NOT NULL,
   `cranemode_aops` TINYINT(1) NOT NULL,
   `cranemode_ahc` TINYINT(1) NOT NULL,
-  `alarm_class` TINYINT(1) NOT NULL,
+  `alarm_class` TINYINT(1) NOT NULL COMMENT 'Класс тревоги: 0 - норма, 1 - Авария, 4 - Предупреждение',
   PRIMARY KEY (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
