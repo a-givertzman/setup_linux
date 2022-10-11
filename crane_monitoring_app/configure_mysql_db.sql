@@ -136,7 +136,7 @@ CREATE TABLE `fault_sample` (
   `winch1_load` decimal(8,2) NOT NULL DEFAULT '0.0' COMMENT 'Нагрузка лебедки 1 (тонны)',
   `winch1_load_awarage` decimal(8,2) NOT NULL DEFAULT '0.0' COMMENT 'Нагрузка лебедки 1 (тонны)',
   `alarm_class` TINYINT(1) NOT NULL COMMENT 'Класс тревоги: 0 - норма, 1 - Авария, 4 - Предупреждение',
-  PRIMARY KEY (`timestamp`)
+  PRIMARY KEY (`timestamp_begin`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='Рабочие циклы. Парамеьры работы крана расчитанные в период рабочего цикла';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
