@@ -131,8 +131,8 @@ DROP TABLE IF EXISTS `fault_sample`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `fault` (
-  `timestamp_begin` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT='Метка времени начала аварийного режима',
-  `timestamp_end` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT='Метка времени начала аварийного режима',
+  `timestamp_begin` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Метка времени начала аварийного режима',
+  `timestamp_end` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) COMMENT 'Метка времени начала аварийного режима',
   `winch1_load` decimal(8,2) NOT NULL DEFAULT '0.0' COMMENT 'Нагрузка лебедки 1 (тонны)',
   `winch1_load_awarage` decimal(8,2) NOT NULL DEFAULT '0.0' COMMENT 'Нагрузка лебедки 1 (тонны)',
   `alarm_class` TINYINT(1) NOT NULL COMMENT 'Класс тревоги: 0 - норма, 1 - Авария, 4 - Предупреждение',
