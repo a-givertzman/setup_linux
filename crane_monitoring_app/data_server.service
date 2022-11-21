@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 WorkingDirectory=/home/scada/app/python-proj/s7-data-server/
-ExecStart=/usr/bin/python3 /home/scada/app/python-proj/s7-data-server/sds_run.py
+ExecStart=python3.10 /home/scada/app/python-proj/s7-data-server/sds_run.py
 
 [Install]
 WantedBy=multi-user.target
