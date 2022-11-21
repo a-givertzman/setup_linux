@@ -20,9 +20,12 @@ if [ hasSudo ]; then
   #%sudo  ALL=(ALL:ALL) ALL
   read -p 'Enter root password:' password
   echo -e $password | \
-    su -c "sudo sed --in-place '/^#\s*%sudo\s\+ALL\s*=\s*(/s/^#//g' /etc/sudoers"
+    su -c "sed --in-place '/^#\s*%sudo\s\+ALL\s*=\s*(/s/^#//g' /etc/sudoers"
 
   read -p "Enter user name, to add to sudo (defoult $(whoami)): " userName
+
+  su -c "apt update"
+  su -c "apt install sudo -y"
 
   if [ ! $userName ]; then
     userName=$(whoami)
@@ -34,7 +37,7 @@ if [ hasSudo ]; then
     echo -e "user found, id = $userId [$userName]"
     echo -e $password | su -c "sudo usermod -a -G sudo $userName"
   else
-    echo -e 'user not found, id = $userId [$userName]'
+    echo -e "user not found, id = $userId [$userName]"
     echo -e $password | su -c "sudo useradd -g sudo $userName"
   fi
 fi
