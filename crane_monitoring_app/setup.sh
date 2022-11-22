@@ -73,7 +73,24 @@ else
     echo -e "user not found, id = $userId [$userName]"
     echo -e $rPassword | su -c "sudo useradd -g sudo $userName"
   fi
+  echo -e $rPassword | su -c "sudo reboot"
 fi
+
+packageName="xinit"
+if isInstalled $packageName; then
+    echo
+else
+    echo -e "installing xinit..."
+    sudo apt install xinit
+fi 
+
+packageName="libgtk-3-0"
+if isInstalled $packageName; then
+    echo
+else
+    echo -e "installing libgtk-3-0..."
+    sudo apt install libgtk-3-0
+fi 
 
 mkdir -p ~/flutter
 mkdir -p ~/app
