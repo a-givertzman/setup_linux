@@ -46,7 +46,7 @@ if isInstalled $packageName; then
 else
     echo -e "installing sudo..."
     checkRootPassword
-    echo $rPassword | su -c "apt show $app"
+    echo $rPassword | su -c "apt install $app -y"
 fi 
 
 
