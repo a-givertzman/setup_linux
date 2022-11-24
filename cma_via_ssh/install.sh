@@ -56,9 +56,5 @@ if $install_services; then
     scp $path $path1 $path2 $path3 $username@$hostname:/tmp/
     echo -e "instaling services..."
     ssh -t $username@$hostname "sudo -s bash /tmp/install_services.sh"
-    # echo -e "\nrebooting remote $hostname..."
-    # ssh -t $username@$hostname "sudo reboot"
-    # sleep 5s
-    # while ! ping -c 1 $hostname &>/dev/null; do :; done
-    # echo -e "\nreboot remote $hostname done."
+    rebootRemote
 fi
