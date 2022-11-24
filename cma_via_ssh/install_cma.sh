@@ -1,8 +1,8 @@
 #!/bin/bash
 
-read rPassword tmpPath <<<$@
-echo -e "\tRoot password: $rPassword"
+read tmpPath <<<$@
 echo -e "\tApplication release archive: $tmpPath"
+# echo -e "\tRoot password: $rPassword"
 
 isInstalled() {
   target=$1
