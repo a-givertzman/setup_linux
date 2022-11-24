@@ -18,7 +18,7 @@ rebootRemote() {
     echo -e "\nreboot remote $hostname done."
 }
 
-# INSTALLETION SETTINGS
+############ INSTALLETION SETTINGS ############
 username=scada
 hostname=192.168.120.157
 
