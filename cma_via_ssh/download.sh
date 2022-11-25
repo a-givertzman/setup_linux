@@ -13,9 +13,9 @@ proxy_set="http://constr:constr@192.168.120.234:3128"
 # Validate settings.
 [ -f ~/.secrets ] && source ~/.secrets
 [ "$GITHUB_API_TOKEN" ] || { echo "Error: Please define GITHUB_API_TOKEN variable." >&2; exit 1; }
-[ $# -ne 4 ] && { echo "Usage: $0 [owner] [repo] [tag] [asset]"; exit 1; }
+[ $# -ne 5 ] && { echo "Usage: $0 [owner] [repo] [tag] [asset] [target]"; exit 1; }
 [ "$TRACE" ] && set -x
-read owner repo tag asset <<<$@
+read owner repo tag asset target <<<$@
 
 # Define variables.
 GH_API="https://api.github.com"
@@ -39,12 +39,13 @@ GH_ASSET="$GH_REPO/releases/assets/$id"
 
 # Download asset file.
 echo "Downloading asset from \"$GH_ASSET\" ..." >&2
+echo -e "\tto \"$target\"" >&2
     # -H "Authorization: token $GITHUB_API_TOKEN"
-rm -f "/tmp/$asset"
+# rm $target
 curl $CURL_ARGS \
     --progress-bar \
     --proxy $proxy_set \
     -H "Authorization: Bearer $GITHUB_API_TOKEN" \
     -H 'Accept: application/octet-stream' \
-    "$GH_ASSET" > "/tmp/$asset"
+    "$GH_ASSET" > $target
 echo "$0 done." >&2

@@ -28,80 +28,108 @@ installPackage() {
 }
 
 rebootRemote() {
-    echo -e "\nrebooting remote $hostname..."
-    ssh -t $username@$hostname 'su -c "systemctl reboot"'
+    echo -e "\nrebooting remote $hostName..."
+    ssh -t $userName@$hostName 'su -c "systemctl reboot"'
     sleep 5s
-    while ! ping -c 1 $hostname &>/dev/null; do :; done
-    echo -e "\nreboot remote $hostname done."
+    while ! ping -c 1 $hostName &>/dev/null; do :; done
+    echo -e "\nreboot remote $hostName done."
 }
 
 ############ INSTALLING DEPENDENCIES ON LOCAL ############
 # installPackage sshpass
 
+
 ############ INSTALLETION SETTINGS ############
-username=scada
-hostname=192.168.120.168
+userName=scada
+hostName=192.168.120.168
 
-# read -p "Enter $username@$hostname password: " sshPassword
-# read -p "Enter root@$hostname password: " rPassword
+installSudo=false
+installLxde=true
+installAutologin=false
+installCma=true
+    cmaAppDir='/home/scada/app/cma/'
+    cmaAppName='crane_monitoring_app'
+    cmaGitOwner='a-givertzman'
+    cmaGitRepo='crane_monitoring_app'
+    cmaGitTag='internal_v0.0.33'
+    cmaGitAsset='release.zip'
+    # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
+    cmaGitToken='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'
+installApiServer=true
+installDataServer=true
+installServices=true
 
-install_sudo=false
-install_lxde=true
-install_autologin=true
-install_cma=true
-    cma_git_owner='a-givertzman'
-    cma_git_repo='crane_monitoring_app'
-    cma_git_tag='internal_v0.0.33'
-    cma_git_asset='release.zip'
-    # cma_git_token='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
-    cma_git_token='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'
-install_api_server=true
-install_data_server=true
-install_services=true
+
+
+# read -p "Enter $userName@$hostName password: " sshPassword
+# read -p "Enter root@$hostName password: " rPassword
 
 
 ############ INSTALL SUDO ############
-if $install_sudo; then
+if $installSudo; then
     sName=install_sudo.sh
     path=$(dirname -- "$0")/$sName 
-    echo -e "\n${BLUE}Installing sudo on remote $hostname...${NC}"
-    scp $path $username@$hostname:/tmp/
-    ssh -t $username@$hostname "su -c 'chmod +x /tmp/$sName && /tmp/$sName'"
+    echo -e "\n${BLUE}Installing sudo on remote $hostName...${NC}"
+    scp $path $userName@$hostName:/tmp/
+    ssh -t $userName@$hostName "su -c 'chmod +x /tmp/$sName && /tmp/$sName'"
 fi
 
 ############ INSTALL LXDE ############
-if $install_lxde; then
+if $installLxde; then
     sName=install_lxde.sh
     path=$(dirname -- "$0")/$sName 
-    echo -e "\n${BLUE}Installing LXDE on remote $hostname...${NC}"
-    scp $path $username@$hostname:/tmp/
-    ssh -t $username@$hostname "su -c 'chmod +x /tmp/$sName && /tmp/$sName'"
+    echo -e "\n${BLUE}Installing LXDE on remote $hostName...${NC}"
+    scp $path $userName@$hostName:/tmp/
+    ssh -t $userName@$hostName "su -c 'chmod +x /tmp/$sName && /tmp/$sName'"
 fi
 
-############ INSTALL AUTO LOGIN ############
-if $install_autologin; then
+############ INSTALL LXDE AUTO LOGIN ############
+if $installAutologin | $installLxde; then
     sName=install_autologin.sh
     path=$(dirname -- "$0")/$sName 
-    echo -e "\n${BLUE}Installing autologin on remote $hostname...${NC}"
-    scp $path $username@$hostname:/tmp/
-    ssh -t $username@$hostname "su -c 'chmod +x /tmp/$sName && /tmp/$sName'"
+    echo -e "\n${BLUE}Installing LXDE autologin on remote $hostName...${NC}"
+    scp $path $userName@$hostName:/tmp/
+    ssh -t $userName@$hostName "su -c 'chmod +x /tmp/$sName && /tmp/$sName'"
 fi
 
 ############ INSTALL CMA ############
-if $install_cma; then
+if $installCma; then
     sName=install_cma.sh
     path=$(dirname -- "$0")/$sName
-    tmpPath="/tmp/$cma_git_asset"
-    echo -e "\n${BLUE}Installing CMA on remote $hostname...${NC}"
-    $(dirname -- "$0")/download.sh $cma_git_owner $cma_git_repo $cma_git_tag $cma_git_asset
+    tmpPath=$(dirname -- "$0")/distro/$cmaGitAsset
+    echo -e "\n${BLUE}Installing CMA on remote $hostName...${NC}"
+    echo -e "\tchecking local repositiry "$tmpPath""
+    if [ -f "$tmpPath" ]; then
+        echo "$tmpPath exists."
+    else
+        $(dirname -- "$0")/download.sh $cmaGitOwner $cmaGitRepo $cmaGitTag $cmaGitAsset $tmpPath
+    fi
     echo -e "coping files..."
-    scp $path $tmpPath $username@$hostname:/tmp/
+    scp $path $tmpPath $userName@$hostName:/tmp/
     echo -e "instaling application..."
-    ssh -t $username@$hostname "chmod +x /tmp/$sName && /tmp/$sName $tmpPath"
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName /tmp/$cmaGitAsset $cmaAppDir $cmaAppName"
+fi
+
+############ INSTALL CMA ############
+if $installCma; then
+    sName=install_cma.sh
+    path=$(dirname -- "$0")/$sName
+    tmpPath=$(dirname -- "$0")/distro/$cmaGitAsset
+    echo -e "\n${BLUE}Installing CMA on remote $hostName...${NC}"
+    echo -e "\tchecking local repositiry "$tmpPath""
+    if [ -f "$tmpPath" ]; then
+        echo "$tmpPath exists."
+    else
+        $(dirname -- "$0")/download.sh $cmaGitOwner $cmaGitRepo $cmaGitTag $cmaGitAsset $tmpPath
+    fi
+    echo -e "coping files..."
+    scp $path $tmpPath $userName@$hostName:/tmp/
+    echo -e "instaling application..."
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName /tmp/$cmaGitAsset $cmaAppDir $cmaAppName"
 fi
 
 ############ INSTALL SERVICES ############
-if $install_services; then
+if $installServices; then
     sName=install_services.sh
     path=$(dirname -- "$0")/$sName
     path1=$(dirname -- "$0")/services/api_server.service 
@@ -109,10 +137,10 @@ if $install_services; then
     path3=$(dirname -- "$0")/services/scada_app.service
     path4=$(dirname -- "$0")/services/configure_ui.service
     path5=$(dirname -- "$0")/configure_ui.sh
-    echo -e "\n${BLUE}Installing services on remote $hostname...${NC}"
+    echo -e "\n${BLUE}Installing services on remote $hostName...${NC}"
     echo -e "coping files..."
-    scp $path $path1 $path2 $path3 $path4 $path5 $username@$hostname:/tmp/
+    scp $path $path1 $path2 $path3 $path4 $path5 $userName@$hostName:/tmp/
     echo -e "instaling services..."
-    ssh -t $username@$hostname "chmod +x /tmp/$sName && su -c'/tmp/$sName'"
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && su -c'/tmp/$sName'"
     rebootRemote
 fi
