@@ -46,6 +46,9 @@ hostName=192.168.120.168
 installSudo=false
 installLxde=false
 installAutologin=false
+installPython310=true
+    py310Url='https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz'
+    py310Asset='Python-3.10.8.tgz'
 installCma=false
     cmaAppDir='/home/scada/app/cma/'
     cmaAppName='crane_monitoring_app'
@@ -55,8 +58,8 @@ installCma=false
     cmaGitAsset='release.zip'
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     cmaGitToken='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'
-installApiServer=false
-installDataServer=true
+# installApiServer=false
+installDataServer=false
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
     dsGitOwner='a-givertzman'
@@ -65,7 +68,7 @@ installDataServer=true
     dsGitAsset='ds_release.zip'
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     dsGitToken='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'
-installServices=true
+installServices=false
 
 # proxy_set="http://constr:constr@192.168.120.234:3128"
 # GITHUB_API_TOKEN=$dsGitToken
@@ -133,6 +136,24 @@ if $installAutologin | $installLxde; then
     echo -e "\n${BLUE}Installing LXDE autologin on remote $hostName...${NC}"
     scp $path $userName@$hostName:/tmp/
     ssh -t $userName@$hostName "su -c 'chmod +x /tmp/$sName && /tmp/$sName'"
+fi
+
+############ INSTALL PYTHON3.10 ############
+if $installPython; then
+    sName=install_python310.sh
+    path=$(dirname -- "$0")/$sName
+    tmpPath=$(dirname -- "$0")/distro/$py310Asset
+    echo -e "\n${BLUE}Installing python3.10 on remote $hostName...${NC}"
+    echo -e "\tchecking local repositiry "$tmpPath""
+    if [ -f "$tmpPath" ]; then
+        echo "$tmpPath exists."
+    else
+        curl $py310Url > $tmpPath
+    fi
+    echo -e "coping files..."
+    scp $path $tmpPath $userName@$hostName:/tmp/
+    echo -e "instaling application..."
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName /tmp/$cmaGitAsset $cmaAppDir $cmaAppName"
 fi
 
 ############ INSTALL DATA SERVER ############
