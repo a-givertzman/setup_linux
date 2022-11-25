@@ -44,9 +44,9 @@ userName=scada
 hostName=192.168.120.168
 
 installSudo=false
-installLxde=true
+installLxde=false
 installAutologin=false
-installCma=true
+installCma=false
     cmaAppDir='/home/scada/app/cma/'
     cmaAppName='crane_monitoring_app'
     cmaGitOwner='a-givertzman'
@@ -55,10 +55,53 @@ installCma=true
     cmaGitAsset='release.zip'
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     cmaGitToken='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'
-installApiServer=true
+installApiServer=false
 installDataServer=true
+    dsAppDir='/home/scada/app/data_server/'
+    dsAppName='sds_run.py'
+    dsGitOwner='a-givertzman'
+    dsGitRepo='s7-data-server'
+    dsGitBranch='Fault-Registrator'
+    dsGitAsset='ds_release.zip'
+    # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
+    dsGitToken='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'
 installServices=true
 
+# proxy_set="http://constr:constr@192.168.120.234:3128"
+# GITHUB_API_TOKEN=$dsGitToken
+# CURL_ARGS="-LJ"
+
+# owner=$dsGitOwner
+# repo=$dsGitRepo
+# tag=$dsGitTag
+# GH_API="https://api.github.com"
+# GH_REPO="$GH_API/repos/$owner/$repo"
+# GH_TAGS="$GH_REPO/releases/tags/$tag"
+# GH_ASSET="$GH_REPO/releases/assets/"
+# GH_ASSET="$GH_REPO/releases/tags/$tag"
+
+# target=$dirName/distro/ds_src.zip
+
+# echo "url: $GH_ASSET"
+# echo "target: $target"
+
+# curl $CURL_ARGS \
+#     --progress-bar \
+#     --proxy $proxy_set \
+#     -H "Authorization: Bearer $GITHUB_API_TOKEN" \
+#     -H 'Accept: application/json' \
+#     "$GH_ASSET" > $target
+# curl $CURL_ARGS \
+#     --progress-bar \
+#     --proxy $proxy_set \
+#     -H "Authorization: Bearer $GITHUB_API_TOKEN" \
+#     -H 'Accept: application/vnd.github+json' \
+#     "https://api.github.com/repos/a-givertzman/s7-data-server/zipball/Fault-Registrator" > $target
+
+
+#     # -H 'Accept: application/octet-stream' \
+#     # -H 'Accept: application/json' \
+# exit 0
 
 
 # read -p "Enter $userName@$hostName password: " sshPassword
@@ -92,22 +135,22 @@ if $installAutologin | $installLxde; then
     ssh -t $userName@$hostName "su -c 'chmod +x /tmp/$sName && /tmp/$sName'"
 fi
 
-############ INSTALL CMA ############
-if $installCma; then
-    sName=install_cma.sh
+############ INSTALL DATA SERVER ############
+if $installDataServer; then
+    sName=install_data_server.sh
     path=$(dirname -- "$0")/$sName
-    tmpPath=$(dirname -- "$0")/distro/$cmaGitAsset
-    echo -e "\n${BLUE}Installing CMA on remote $hostName...${NC}"
+    tmpPath=$(dirname -- "$0")/distro/$dsGitAsset
+    echo -e "\n${BLUE}Installing DATA SERVER on remote $hostName...${NC}"
     echo -e "\tchecking local repositiry "$tmpPath""
     if [ -f "$tmpPath" ]; then
         echo "$tmpPath exists."
     else
-        $(dirname -- "$0")/download.sh $cmaGitOwner $cmaGitRepo $cmaGitTag $cmaGitAsset $tmpPath
+        $(dirname -- "$0")/download_src.sh $dsGitOwner $dsGitRepo $dsGitBranch $tmpPath
     fi
     echo -e "coping files..."
     scp $path $tmpPath $userName@$hostName:/tmp/
     echo -e "instaling application..."
-    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName /tmp/$cmaGitAsset $cmaAppDir $cmaAppName"
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName /tmp/$dsGitAsset $dsAppDir $dsAppName"
 fi
 
 ############ INSTALL CMA ############
