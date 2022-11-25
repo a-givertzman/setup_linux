@@ -28,6 +28,20 @@ else
     su -c 'apt install unzip -y'
 fi 
 
+packageName="mysql-server"
+if isInstalled $packageName; then
+    :
+else
+    echo -e "\t${BLUE}Installing mysql-server on remote $hostname...${NC}"
+    cd /tmp/
+    mySqlPackege="mysql-apt-config_0.8.22-1_all.deb"
+    wget "https://dev.mysql.com/get/$mySqlPackege"
+    sudo dpkg -i $mySqlPackege
+    su -c 'apt update'
+    su -c 'apt-get install mysql-server -y'
+fi 
+
+
 echo -e "\t${BLUE}Extracting $tmpPath on remote $hostname...${NC}"
 rm -rf '/tmp/ds_release'
 unzip $tmpPath -d '/tmp/ds_release/'

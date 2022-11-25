@@ -41,12 +41,14 @@ rebootRemote() {
 
 ############ INSTALLETION SETTINGS ############
 userName=scada
-hostName=192.168.120.168
+hostName=192.168.120.171
+proxy_set="http://constr:constr@192.168.120.234:3128"
+
 
 installSudo=false
 installLxde=false
 installAutologin=false
-installPython310=true
+installPython310=false
     py310Url='https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz'
     py310Asset='Python-3.10.8.tgz'
 installCma=false
@@ -59,7 +61,7 @@ installCma=false
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     cmaGitToken='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'
 # installApiServer=false
-installDataServer=false
+installDataServer=true
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
     dsGitOwner='a-givertzman'
@@ -139,7 +141,7 @@ if $installAutologin | $installLxde; then
 fi
 
 ############ INSTALL PYTHON3.10 ############
-if $installPython; then
+if $installPython310; then
     sName=install_python310.sh
     path=$(dirname -- "$0")/$sName
     tmpPath=$(dirname -- "$0")/distro/$py310Asset
@@ -148,7 +150,10 @@ if $installPython; then
     if [ -f "$tmpPath" ]; then
         echo "$tmpPath exists."
     else
-        curl $py310Url > $tmpPath
+        curl $CURL_ARGS \
+            --progress-bar \
+            --proxy $proxy_set \
+            $py310Url > $tmpPath
     fi
     echo -e "coping files..."
     scp $path $tmpPath $userName@$hostName:/tmp/
