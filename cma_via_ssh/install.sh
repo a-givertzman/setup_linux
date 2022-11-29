@@ -48,8 +48,37 @@ proxy_set="http://constr:constr@192.168.120.234:3128"
 installSudo=false
 installLxde=false
 installAutologin=false
-installPython310=false
-    py310Url='https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz'
+installPython310=true
+    readonly py310Distros=(
+        "build-essential 
+            build-essential_12.9.tar.xz
+            http://ftp.ru.debian.org/debian/pool/main/b/build-essential/build-essential_12.9_amd64.deb"
+        "zlib1g-dev | 
+            zlib_1.2.11.dfsg.orig.tar.gz
+            http://ftp.ru.debian.org/debian/pool/main/z/zlib/zlib1g-dev_1.2.13.dfsg-1_amd64.deb"
+        "libncurses5-dev | 
+            libncurses5-dev_6.0+20161126-1+deb9u2_amd64.deb
+            http://ftp.ru.debian.org/debian/pool/main/n/ncurses/libncurses5-dev_6.0+20161126-1+deb9u2_amd64.deb"
+        "libgdbm-dev | 
+            libgdbm-dev_1.23-3_amd64.deb
+            http://ftp.ru.debian.org/debian/pool/main/g/gdbm/libgdbm-dev_1.23-3_amd64.deb"
+        "libnss3-dev | 
+            libnss3-dev_3.85-1_amd64.deb
+            http://ftp.ru.debian.org/debian/pool/main/n/nss/libnss3-dev_3.85-1_amd64.deb"
+        "python310 |  
+            Python-3.10.8.tgz | 
+            https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz"
+        "mysql-connector-python |
+            mysql-connector-python-8.0.31.tar.gz |
+            https://files.pythonhosted.org/packages/cd/a7/42f58c5f8bd6a52a0faabc92b04928ec4014eba5986ca11c02bb26abd1f5/mysql-connector-python-8.0.31.tar.gz"
+        "numpy |
+            numpy-1.23.5.tar.gz |
+            https://files.pythonhosted.org/packages/42/38/775b43da55fa7473015eddc9a819571517d9a271a9f8134f68fb9be2f212/numpy-1.23.5.tar.gz"
+        "python-snap7 |
+            python-snap7-1.2.tar.gz |
+            https://files.pythonhosted.org/packages/d7/42/06793d68ddf1c07c975cd8b84d8240c854b718ca05b1976a2fb8588ee770/python-snap7-1.2.tar.gz"
+    )
+    py310Urls='https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz'
     py310Asset='Python-3.10.8.tgz'
 installCma=false
     cmaAppDir='/home/scada/app/cma/'
@@ -61,7 +90,7 @@ installCma=false
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     cmaGitToken='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'
 # installApiServer=false
-installDataServer=true
+installDataServer=false
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
     dsGitOwner='a-givertzman'
@@ -144,21 +173,39 @@ fi
 if $installPython310; then
     sName=install_python310.sh
     path=$(dirname -- "$0")/$sName
-    tmpPath=$(dirname -- "$0")/distro/$py310Asset
+    # tmpPath=$(dirname -- "$0")/distro/$py310Asset
     echo -e "\n${BLUE}Installing python3.10 on remote $hostName...${NC}"
-    echo -e "\tchecking local repositiry "$tmpPath""
-    if [ -f "$tmpPath" ]; then
-        echo "$tmpPath exists."
-    else
-        curl $CURL_ARGS \
-            --progress-bar \
-            --proxy $proxy_set \
-            $py310Url > $tmpPath
-    fi
+    LST=""
+    for package in "${py310Distros[@]}"; do 
+        # local name file url
+        tmpPath=""
+        echo $package | sed 's/\s|*\s*/ /g' | read -r name file url
+        tmpPath=$(dirname -- "$0")/distro/$file
+        echo $tmpPath
+        if ! [ -f "$tmpPath" ]; then
+            echo "$tmpPath exists."
+        else
+            if [ -z "${proxy_set}" ]; then
+                curl $CURL_ARGS \
+                    --progress-bar \
+                    --proxy $proxy_set \
+                    $url > $tmpPath
+            else
+                curl $CURL_ARGS \
+                    --progress-bar \
+                    $url > $tmpPath
+            fi
+        fi
+        
+        echo -e "\tchecking local repositiry "$tmpPath""
+        LST="$LST $tmpPath"
+    done
     echo -e "coping files..."
-    scp $path $tmpPath $userName@$hostName:/tmp/
+    # echo -e "$LST"
+    # echo -e $LST | xargs -i scp {} $path $userName@$hostName:/tmp/
+    scp $path$LST $userName@$hostName:/tmp/
     echo -e "instaling application..."
-    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName /tmp/$cmaGitAsset $cmaAppDir $cmaAppName"
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName /tmp/$py310Distros"
 fi
 
 ############ INSTALL DATA SERVER ############

@@ -1,9 +1,9 @@
 #!/bin/bash
 
-read tmpPath appDir appName <<<$@
-echo -e "\tApplication release archive: $tmpPath"
-echo -e "\tApplication instalation path: $appDir"
-echo -e "\tApplication name: $appName"
+read packages appDir appName <<<$@
+echo -e "\tPackeges: $packages"
+# echo -e "\tApplication instalation path: $appDir"
+# echo -e "\tApplication name: $appName"
 # echo -e "\tRoot password: $rPassword"
 
 
@@ -23,7 +23,7 @@ packageName="tar"
 if isInstalled $packageName; then
     :
 else
-    echo -e "\t${BLUE}Installing UnZip on remote $hostname...${NC}"
+    echo -e "\t${BLUE}Installing tar on remote $hostname...${NC}"
     su -c 'apt update'
     su -c 'apt install tar -y'
 fi 
