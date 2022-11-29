@@ -50,31 +50,54 @@ installLxde=false
 installAutologin=false
 installPython310=true
     readonly py310Distros=(
+            # build-essential_12.9_amd64.deb
+            # http://ftp.ru.debian.org/debian/pool/main/b/build-essential/build-essential_12.9_amd64.deb
         "build-essential 
-            build-essential_12.9.tar.xz
-            http://ftp.ru.debian.org/debian/pool/main/b/build-essential/build-essential_12.9_amd64.deb"
+            apt
+        "
+            # zlib1g-dev_1.2.13.dfsg-1_amd64.deb
+            # http://ftp.ru.debian.org/debian/pool/main/z/zlib/zlib1g-dev_1.2.13.dfsg-1_amd64.deb
         "zlib1g-dev | 
-            zlib_1.2.11.dfsg.orig.tar.gz
-            http://ftp.ru.debian.org/debian/pool/main/z/zlib/zlib1g-dev_1.2.13.dfsg-1_amd64.deb"
+            apt
+        "
+            # libncurses5-dev_6.0+20161126-1+deb9u2_amd64.deb
+            # http://ftp.ru.debian.org/debian/pool/main/n/ncurses/libncurses5-dev_6.0+20161126-1+deb9u2_amd64.deb
         "libncurses5-dev | 
-            libncurses5-dev_6.0+20161126-1+deb9u2_amd64.deb
-            http://ftp.ru.debian.org/debian/pool/main/n/ncurses/libncurses5-dev_6.0+20161126-1+deb9u2_amd64.deb"
+            apt
+        "
+            # libgdbm-dev_1.23-3_amd64.deb
+            # http://ftp.ru.debian.org/debian/pool/main/g/gdbm/libgdbm-dev_1.23-3_amd64.deb
         "libgdbm-dev | 
-            libgdbm-dev_1.23-3_amd64.deb
-            http://ftp.ru.debian.org/debian/pool/main/g/gdbm/libgdbm-dev_1.23-3_amd64.deb"
+            apt
+        "
+            # libnss3-dev_3.85-1_amd64.deb
+            # http://ftp.ru.debian.org/debian/pool/main/n/nss/libnss3-dev_3.85-1_amd64.deb
         "libnss3-dev | 
-            libnss3-dev_3.85-1_amd64.deb
-            http://ftp.ru.debian.org/debian/pool/main/n/nss/libnss3-dev_3.85-1_amd64.deb"
+            apt
+        "
         "python310 |  
+            src
             Python-3.10.8.tgz | 
-            https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz"
+            https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz
+        "
+        "python3-pip
+            apt
+        "
+        "mysql-server
+            apt
+            mysql-server_8.0.31-1_all.deb
+            http://ftp.ru.debian.org/debian/pool/main/m/mysql-8.0/mysql-server_8.0.31-1_all.deb
+        "
         "mysql-connector-python |
+            pip
             mysql-connector-python-8.0.31.tar.gz |
             https://files.pythonhosted.org/packages/cd/a7/42f58c5f8bd6a52a0faabc92b04928ec4014eba5986ca11c02bb26abd1f5/mysql-connector-python-8.0.31.tar.gz"
         "numpy |
+            pip
             numpy-1.23.5.tar.gz |
             https://files.pythonhosted.org/packages/42/38/775b43da55fa7473015eddc9a819571517d9a271a9f8134f68fb9be2f212/numpy-1.23.5.tar.gz"
         "python-snap7 |
+            pip
             python-snap7-1.2.tar.gz |
             https://files.pythonhosted.org/packages/d7/42/06793d68ddf1c07c975cd8b84d8240c854b718ca05b1976a2fb8588ee770/python-snap7-1.2.tar.gz"
     )
@@ -173,29 +196,35 @@ if $installPython310; then
     path=$(dirname -- "$0")/$sName
     echo -e "\n${BLUE}Installing python3.10 on remote $hostName...${NC}"
     files=""
+    packages=""
     for package in "${py310Distros[@]}"; do 
         # local name file url
         package=$(echo $package | sed 's/\s|*\s*/ /g')
-        read -r name file url <<< $package
+        read -r name type file url <<< $package
         tmpPath=$(dirname -- "$0")/distro/$file
-        files="$files $tmpPath"
-        echo -e "\tchecking local repositiry "$tmpPath""
-        if [ -f "$tmpPath" ]; then
-            echo "$tmpPath exists."
-        else
-            if ! [ -z "${proxy_set}" ]; then
-                curl $CURL_ARGS \
-                    --create-dirs \
-                    --progress-bar \
-                    --proxy $proxy_set \
-                    -o $tmpPath \
-                    $url
-            else
-                curl $CURL_ARGS \
-                    --create-dirs \
-                    --progress-bar \
-                    -o $tmpPath \
-                    $url
+        packages="$packages '$name|$type|$file|$url'"
+        if ! [ -z "${file}" ]; then
+            files="$files $tmpPath"
+            if ! [ -z "${url}" ]; then
+                echo -e "\tchecking local repositiry "$tmpPath""
+                if [ -f "$tmpPath" ]; then
+                    echo "$tmpPath exists."
+                else
+                    if ! [ -z "${proxy_set}" ]; then
+                        curl $CURL_ARGS \
+                            --create-dirs \
+                            --progress-bar \
+                            --proxy $proxy_set \
+                            -o $tmpPath \
+                            $url
+                    else
+                        curl $CURL_ARGS \
+                            --create-dirs \
+                            --progress-bar \
+                            -o $tmpPath \
+                            $url
+                    fi
+                fi
             fi
         fi
     done
@@ -203,8 +232,8 @@ if $installPython310; then
     # echo -e "$files"
     # echo -e $files | xargs -i scp {} $path $userName@$hostName:/tmp/
     scp $path$files $userName@$hostName:/tmp/
-    echo -e "instaling application..."
-    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName ${py310Distros[@]}"
+    echo -e "instaling applications..."
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName$packages"
 fi
 
 ############ INSTALL DATA SERVER ############
