@@ -57,49 +57,52 @@ installPython310=true
         "
             # zlib1g-dev_1.2.13.dfsg-1_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/z/zlib/zlib1g-dev_1.2.13.dfsg-1_amd64.deb
-        "zlib1g-dev | 
+        "zlib1g-dev
             apt
         "
             # libncurses5-dev_6.0+20161126-1+deb9u2_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/n/ncurses/libncurses5-dev_6.0+20161126-1+deb9u2_amd64.deb
-        "libncurses5-dev | 
+        "libncurses5-dev
             apt
         "
             # libgdbm-dev_1.23-3_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/g/gdbm/libgdbm-dev_1.23-3_amd64.deb
-        "libgdbm-dev | 
+        "libgdbm-dev
             apt
         "
             # libnss3-dev_3.85-1_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/n/nss/libnss3-dev_3.85-1_amd64.deb
-        "libnss3-dev | 
+        "libnss3-dev
             apt
         "
-        "python310 |  
+        "python310
             src
-            Python-3.10.8.tgz | 
             https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz
+            Python-3.10.8.tgz | Python-3.10.8
         "
         "python3-pip
             apt
         "
         "mysql-server
             apt
-            mysql-server_8.0.31-1_all.deb
             http://ftp.ru.debian.org/debian/pool/main/m/mysql-8.0/mysql-server_8.0.31-1_all.deb
+            mysql-server_8.0.31-1_all.deb
         "
-        "mysql-connector-python |
+        "mysql-connector-python
             pip
-            mysql-connector-python-8.0.31.tar.gz |
-            https://files.pythonhosted.org/packages/cd/a7/42f58c5f8bd6a52a0faabc92b04928ec4014eba5986ca11c02bb26abd1f5/mysql-connector-python-8.0.31.tar.gz"
-        "numpy |
+            https://files.pythonhosted.org/packages/cd/a7/42f58c5f8bd6a52a0faabc92b04928ec4014eba5986ca11c02bb26abd1f5/mysql-connector-python-8.0.31.tar.gz
+            mysql-connector-python-8.0.31.tar.gz
+        "
+        "numpy
             pip
-            numpy-1.23.5.tar.gz |
-            https://files.pythonhosted.org/packages/42/38/775b43da55fa7473015eddc9a819571517d9a271a9f8134f68fb9be2f212/numpy-1.23.5.tar.gz"
-        "python-snap7 |
+            https://files.pythonhosted.org/packages/42/38/775b43da55fa7473015eddc9a819571517d9a271a9f8134f68fb9be2f212/numpy-1.23.5.tar.gz
+            numpy-1.23.5.tar.gz
+        "
+        "python-snap7
             pip
-            python-snap7-1.2.tar.gz |
-            https://files.pythonhosted.org/packages/d7/42/06793d68ddf1c07c975cd8b84d8240c854b718ca05b1976a2fb8588ee770/python-snap7-1.2.tar.gz"
+            https://files.pythonhosted.org/packages/d7/42/06793d68ddf1c07c975cd8b84d8240c854b718ca05b1976a2fb8588ee770/python-snap7-1.2.tar.gz
+            python-snap7-1.2.tar.gz
+        "
     )
 installCma=false
     cmaAppDir='/home/scada/app/cma/'
@@ -200,9 +203,9 @@ if $installPython310; then
     for package in "${py310Distros[@]}"; do 
         # local name file url
         package=$(echo $package | sed 's/\s|*\s*/ /g')
-        read -r name type file url <<< $package
+        read -r name type url file extracted <<< $package
         tmpPath=$(dirname -- "$0")/distro/$file
-        packages="$packages '$name|$type|$file|$url'"
+        packages="$packages '$name|$type|$url|$file|$extracted'"
         if ! [ -z "${file}" ]; then
             files="$files $tmpPath"
             if ! [ -z "${url}" ]; then

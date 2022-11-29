@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# for i in $*; do 
-#   echo $i 
-# done
+for i in $*; do 
+  echo $i 
+done
 packages=("$@")
 # read packages <<<$@
 # echo -e "\tPackeges: $packages"
@@ -26,7 +26,7 @@ isInstalled() {
 # su -c 'apt update'
 for package in "${packages[@]}"; do 
     echo -e "$package:"
-    IFS='|' read -r name type file url <<< $package
+    IFS='|' read -r name type url file extracted <<< $package
     echo -e "\ttype: $type:"
     echo -e "\tname: $name:"
     echo -e "\tfile: $file"
@@ -38,6 +38,10 @@ for package in "${packages[@]}"; do
         else
             echo -e "\n\t${BLUE}Installing $name on $hostname...${NC}"
             if ! [ -z "${file}" ]; then
+                if ! [ $file == *.deb ]; then
+                    tar -xvf "/tmp/$file" --directory '/tmp'
+                    file=$extracted
+                fi
                 # su -c "dpkg -i /tmp/$file"
                 su -c "apt install /tmp/$file -y"
             else
@@ -52,21 +56,20 @@ for package in "${packages[@]}"; do
             echo -e "\n\t${BLUE}Installing $name on $hostname...${NC}"
             if ! [ -z "${file}" ]; then
                 echo -e "\t${BLUE}Extracting /tmp/$file on remote $hostname...${NC}"
-                extractedDir="/tmp/$name"
-                rm -rf $extractedDir
+                rm -rf $/tmp/$extracted
                 tar -xvf "/tmp/$file" --directory '/tmp'
                 # extractedDir="$(find /tmp/py_release -name $appName -type f -printf '%h' -quit)/"
-                if [ -d $extractedDir ]; then
-                    echo -e "\textracted to $extractedDir"
-                    cd $extractedDir
+                if [ -d /tmp/$extracted ]; then
+                    echo -e "\textracted to /tmp/$extracted"
+                    cd /tmp/$extracted
                     ./configure --enable-optimizations
                     make -j $(nproc)
                     su -c "make altinstall"
                     $name --version
-                    su -c 'apt install python3-pip'
-                    echo -e "\tInstalled successful to "$appDir""
+                    # su -c 'apt install python3-pip'
+                    echo -e "\tInstalled successful"
                 else
-                    echo -e "\textracted not found"
+                    echo -e "\textracted not found on "/tmp/$extracted""
                     echo -e "\tNot installed"
                 fi
             fi
