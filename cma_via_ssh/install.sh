@@ -50,43 +50,33 @@ installLxde=false
 installAutologin=false
 installPython310=true
     readonly py310Distros=(
+        "lxde-core apt"
             # build-essential_12.9_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/b/build-essential/build-essential_12.9_amd64.deb
-        "build-essential 
-            apt
-        "
+        "build-essential apt"
             # zlib1g-dev_1.2.13.dfsg-1_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/z/zlib/zlib1g-dev_1.2.13.dfsg-1_amd64.deb
-        "zlib1g-dev
-            apt
-        "
+        "zlib1g-dev apt"
             # libncurses5-dev_6.0+20161126-1+deb9u2_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/n/ncurses/libncurses5-dev_6.0+20161126-1+deb9u2_amd64.deb
-        "libncurses5-dev
-            apt
-        "
+        "libncurses5-dev apt"
             # libgdbm-dev_1.23-3_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/g/gdbm/libgdbm-dev_1.23-3_amd64.deb
-        "libgdbm-dev
-            apt
-        "
+        "libgdbm-dev apt"
             # libnss3-dev_3.85-1_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/n/nss/libnss3-dev_3.85-1_amd64.deb
-        "libnss3-dev
-            apt
-        "
-        "python310
-            src
-            https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz
-            Python-3.10.8.tgz | Python-3.10.8
-        "
-        "python3-pip
-            apt
-        "
+        "libnss3-dev apt"
+        # "python3.10
+        #     src
+        #     https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz
+        #     Python-3.10.8.tgz | Python-3.10.8
+        # "
+        "python3-pip apt"
+        "libaio1 apt" # mysql-server
         "mysql-server
             apt
-            http://ftp.ru.debian.org/debian/pool/main/m/mysql-8.0/mysql-server_8.0.31-1_all.deb
-            mysql-server_8.0.31-1_all.deb
+            http://ftp.ru.debian.org/debian/pool/main/m/mysql-8.0/mysql-server-8.0_8.0.31-1+b1_amd64.deb
+            mysql-server-8.0_8.0.31-1+b1_amd64.deb
         "
         "mysql-connector-python
             pip
