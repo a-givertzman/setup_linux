@@ -1,7 +1,12 @@
 #!/bin/bash
 
-read packages appDir appName <<<$@
-echo -e "\tPackeges: $packages"
+# echo $0
+# echo $1
+# echo $2
+# arg1=$0; shift
+packages=( "$@" )
+# read packages <<<$@
+# echo -e "\tPackeges: $packages"
 # echo -e "\tApplication instalation path: $appDir"
 # echo -e "\tApplication name: $appName"
 # echo -e "\tRoot password: $rPassword"
@@ -19,17 +24,25 @@ isInstalled() {
   fi
 }
 
-packageName="tar"
-if isInstalled $packageName; then
-    :
-else
-    echo -e "\t${BLUE}Installing tar on remote $hostname...${NC}"
-    su -c 'apt update'
-    su -c 'apt install tar -y'
-fi 
+# su -c 'apt update'
+for package in "${packages[@]}"; do 
+    package=$(echo $package | sed 's/\s|*\s*/ /g')
+    read -r name file url <<< $package
+    echo -e "\t${BLUE}$name:${NC}"
+    echo -e "\t$file"
+    echo -e "\t$url"
 
+    # packageName="tar"
+    if isInstalled $name; then
+        echo -e "\t${BLUE}$nane already installed on $hostname...${NC}"
+    else
+        echo -e "\t${BLUE}Installing $name on $hostname...${NC}"
+        su -c 'apt install /tmp/$file -y'
+    fi 
+done
+exit 0
 
-su -c 'apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev -y'
+# su -c 'apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev -y'
 
 echo -e "\t${BLUE}Extracting $tmpPath on remote $hostname...${NC}"
 extractedDir='/tmp/Python-3.10.8'

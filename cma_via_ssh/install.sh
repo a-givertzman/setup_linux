@@ -78,8 +78,6 @@ installPython310=true
             python-snap7-1.2.tar.gz |
             https://files.pythonhosted.org/packages/d7/42/06793d68ddf1c07c975cd8b84d8240c854b718ca05b1976a2fb8588ee770/python-snap7-1.2.tar.gz"
     )
-    py310Urls='https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz'
-    py310Asset='Python-3.10.8.tgz'
 installCma=false
     cmaAppDir='/home/scada/app/cma/'
     cmaAppName='crane_monitoring_app'
@@ -173,39 +171,40 @@ fi
 if $installPython310; then
     sName=install_python310.sh
     path=$(dirname -- "$0")/$sName
-    # tmpPath=$(dirname -- "$0")/distro/$py310Asset
     echo -e "\n${BLUE}Installing python3.10 on remote $hostName...${NC}"
-    LST=""
+    files=""
     for package in "${py310Distros[@]}"; do 
         # local name file url
-        tmpPath=""
-        echo $package | sed 's/\s|*\s*/ /g' | read -r name file url
+        package=$(echo $package | sed 's/\s|*\s*/ /g')
+        read -r name file url <<< $package
         tmpPath=$(dirname -- "$0")/distro/$file
-        echo $tmpPath
-        if ! [ -f "$tmpPath" ]; then
+        files="$files $tmpPath"
+        echo -e "\tchecking local repositiry "$tmpPath""
+        if [ -f "$tmpPath" ]; then
             echo "$tmpPath exists."
         else
-            if [ -z "${proxy_set}" ]; then
+            if ! [ -z "${proxy_set}" ]; then
                 curl $CURL_ARGS \
+                    --create-dirs \
                     --progress-bar \
                     --proxy $proxy_set \
-                    $url > $tmpPath
+                    -o $tmpPath \
+                    $url
             else
                 curl $CURL_ARGS \
+                    --create-dirs \
                     --progress-bar \
-                    $url > $tmpPath
+                    -o $tmpPath \
+                    $url
             fi
         fi
-        
-        echo -e "\tchecking local repositiry "$tmpPath""
-        LST="$LST $tmpPath"
     done
     echo -e "coping files..."
-    # echo -e "$LST"
-    # echo -e $LST | xargs -i scp {} $path $userName@$hostName:/tmp/
-    scp $path$LST $userName@$hostName:/tmp/
+    # echo -e "$files"
+    # echo -e $files | xargs -i scp {} $path $userName@$hostName:/tmp/
+    scp $path$files $userName@$hostName:/tmp/
     echo -e "instaling application..."
-    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName /tmp/$py310Distros"
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName ${py310Distros[@]}"
 fi
 
 ############ INSTALL DATA SERVER ############
