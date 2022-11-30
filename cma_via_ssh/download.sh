@@ -24,7 +24,7 @@ GH_TAGS="$GH_REPO/releases/tags/$tag"
 # AUTH="Authorization: token $GITHUB_API_TOKEN"
 AUTH="Authorization: Bearer $GITHUB_API_TOKEN"
 WGET_ARGS="--content-disposition --auth-no-challenge --no-cookie"
-CURL_ARGS="-LJ"
+CURL_ARGS="-J"
 
 # Validate token.
 curl -o /dev/null -sH "$AUTH" $GH_REPO || { echo "Error: Invalid repo, token or network issue!";  exit 1; }
@@ -43,6 +43,7 @@ echo -e "\tto \"$target\"" >&2
     # -H "Authorization: token $GITHUB_API_TOKEN"
 # rm $target
 curl $CURL_ARGS \
+    --location --max-redirs 10 \
     --progress-bar \
     --proxy $proxy_set \
     -H "Authorization: Bearer $GITHUB_API_TOKEN" \

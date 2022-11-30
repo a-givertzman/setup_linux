@@ -1,8 +1,8 @@
 #!/bin/bash
 
-for i in $*; do 
-  echo $i 
-done
+# for i in $*; do 
+#   echo $i 
+# done
 packages=("$@")
 # read packages <<<$@
 # echo -e "\tPackeges: $packages"
@@ -23,7 +23,9 @@ isInstalled() {
   fi
 }
 
-# su -c 'apt update'
+# su -c 'export PATH=$PATH:/usr/local/sbin:/usr/sbin:/sbin'
+sudo echo $PATH
+sudo apt update
 for package in "${packages[@]}"; do 
     echo -e "$package:"
     IFS='|' read -r name type url file extracted <<< $package
@@ -38,14 +40,29 @@ for package in "${packages[@]}"; do
         else
             echo -e "\n\t${BLUE}Installing $name on $hostname...${NC}"
             if ! [ -z "${file}" ]; then
-                if ! [ $file == *.deb ]; then
+                if ! [[ $file == *.deb ]]; then
+                    echo -e "\t${BLUE}Extracting /tmp/$file on remote $hostname...${NC}"
                     tar -xvf "/tmp/$file" --directory '/tmp'
                     file=$extracted
                 fi
-                # su -c "dpkg -i /tmp/$file"
-                su -c "apt install /tmp/$file -y"
+                sudo apt install /tmp/$file -y
             else
-                su -c "apt install $name -y"
+                sudo apt install $name -y
+            fi
+        fi 
+    fi
+    if [ $type == apt-conf ]; then
+        if isInstalled $name; then
+            echo -e "\t${BLUE}$nane already installed on $hostname...${NC}"
+        else
+            echo -e "\n\t${BLUE}Installing apt coniguration for $name on $hostname...${NC}"
+            if ! [ -z "${file}" ]; then
+                if ! [[ $file == *.deb ]]; then
+                    echo -e "\t${BLUE}Extracting /tmp/$file on remote $hostname...${NC}"
+                    tar -xvf "/tmp/$file" --directory '/tmp'
+                    file=$extracted
+                fi
+                sudo dpkg -i /tmp/$file && sudo apt update
             fi
         fi 
     fi
@@ -64,9 +81,8 @@ for package in "${packages[@]}"; do
                     cd /tmp/$extracted
                     ./configure --enable-optimizations
                     make -j $(nproc)
-                    su -c "make altinstall"
+                    sudo make altinstall
                     $name --version
-                    # su -c 'apt install python3-pip'
                     echo -e "\tInstalled successful"
                 else
                     echo -e "\textracted not found on "/tmp/$extracted""
@@ -78,8 +94,10 @@ for package in "${packages[@]}"; do
     if [ $type == pip ]; then
         echo -e "\n\t${BLUE}Installing $name on $hostname...${NC}"
         if ! [ -z "${file}" ]; then
-            tar -xvf "/tmp/$file" --directory '/tmp/$name'
-            python3.10 -m pip install $name --no-index --find-links /tmp/$name/ #file:///srv/pkg/mypackage
+            # tar -xvf "/tmp/$file" --directory '/tmp/$name'
+            # python3.10 -m pip install -e /tmp/$file
+            # python3.10 -m pip install /tmp/$file
+            python3.10 -m pip install $name --no-index --find-links /tmp/$file #file:///srv/pkg/mypackage
         else
             python3.10 -m pip install $name
         fi

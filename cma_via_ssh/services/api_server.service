@@ -7,8 +7,8 @@ User=scada
 Type=simple
 Restart=always
 RestartSec=1
-WorkingDirectory=/home/scada/app/python-proj/s7-data-server/
-ExecStart=python3.10 /home/scada/app/python-proj/s7-data-server/api_server.py
+WorkingDirectory=/home/scada/app/data-server/
+ExecStart=python3.10 /home/scada/app/data-server/api_server.py
 
 [Install]
 WantedBy=multi-user.target

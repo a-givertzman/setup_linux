@@ -8,7 +8,7 @@ set -e
 type curl grep sed tr >&2
 xargs=$(which gxargs || which xargs)
 
-CURL_ARGS="-LJ"
+CURL_ARGS="-J"
 GITHUB_API_TOKEN='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'
 proxy_set="http://constr:constr@192.168.120.234:3128"
 # Validate settings.
@@ -21,15 +21,17 @@ read owner repo branch target <<<$@
 # Define variables.
 GH_API="https://api.github.com"
 GH_REPO="$GH_API/repos/$owner/$repo"
-GH_ZIPBALL="$GH_REPO/zipball/$branch"
+GH_ZIPBALL="$GH_REPO/tarball/$branch"
 
 # Download asset file.
 echo "Downloading asset from \"$GH_ZIPBALL\" ..." >&2
 echo -e "\tto \"$target\"" >&2
 curl $CURL_ARGS \
+    --location --max-redirs 10 \
     --progress-bar \
     --proxy $proxy_set \
-    -H "Authorization: Bearer $GITHUB_API_TOKEN" \
+    -u 'a.givertzman@icloud.com' \
     -H 'Accept: application/vnd.github+json' \
     "$GH_ZIPBALL" > $target
+    # -H "Authorization: token $GITHUB_API_TOKEN" \
 echo "$0 done." >&2

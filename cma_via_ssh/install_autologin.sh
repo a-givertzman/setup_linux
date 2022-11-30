@@ -3,9 +3,9 @@
 autoLoginConfPath='/etc/lightdm/lightdm.conf'
 
 sudo ls -la /etc/lightdm
-echo
-sudo cat $autoLoginConfPath
-echo -e '\n\n'
+# echo
+# sudo cat $autoLoginConfPath
+# echo -e '\n\n'
 
 insertAfterPattern() {
     pattern=$1
