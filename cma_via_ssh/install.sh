@@ -28,16 +28,24 @@ installPackage() {
 }
 
 rebootRemote() {
-    echo -e "\nrebooting remote $hostName..."
-    ssh -t $userName@$hostName 'su -c "systemctl reboot"'
-    sleep 5s
-    while ! ping -c 1 $hostName &>/dev/null; do :; done
-    echo -e "\nreboot remote $hostName done."
+    read -p "$(echo -e "\n${BLUE}Reboot remote \"hostName\" (y/n)?${NC} ")" answer
+    case ${answer:0:1} in
+        y|Y )
+            echo -e "\nrebooting remote $hostName..."
+            ssh -t $userName@$hostName 'su -c "systemctl reboot"'
+            sleep 5s
+            while ! ping -c 1 $hostName &>/dev/null; do :; done
+            echo -e "\treboot remote $hostName done."
+        ;;
+        * )
+            echo -e "\treboot canceled."
+        ;;
+    esac
 }
+
 
 ############ INSTALLING DEPENDENCIES ON LOCAL ############
 # installPackage sshpass
-
 
 ############ INSTALLETION SETTINGS ############
 userName=scada
@@ -47,9 +55,9 @@ proxy_set="http://constr:constr@192.168.120.234:3128"
 
 installSudo=false
 installLxde=false
-installAutologin=false
-installPython310=true
-    readonly py310Distros=(
+installAutologin=true
+installPackages=true
+    readonly instPackages=(
         "lxde-core apt"
             # build-essential_12.9_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/b/build-essential/build-essential_12.9_amd64.deb
@@ -115,46 +123,16 @@ installDataServer=false
     dsGitToken='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'
 installServices=false
 
-# proxy_set="http://constr:constr@192.168.120.234:3128"
-# GITHUB_API_TOKEN=$dsGitToken
-# CURL_ARGS="-LJ"
-
-# owner=$dsGitOwner
-# repo=$dsGitRepo
-# tag=$dsGitTag
-# GH_API="https://api.github.com"
-# GH_REPO="$GH_API/repos/$owner/$repo"
-# GH_TAGS="$GH_REPO/releases/tags/$tag"
-# GH_ASSET="$GH_REPO/releases/assets/"
-# GH_ASSET="$GH_REPO/releases/tags/$tag"
-
-# target=$dirName/distro/ds_src.zip
-
-# echo "url: $GH_ASSET"
-# echo "target: $target"
-
-# curl $CURL_ARGS \
-#     --progress-bar \
-#     --proxy $proxy_set \
-#     -H "Authorization: Bearer $GITHUB_API_TOKEN" \
-#     -H 'Accept: application/json' \
-#     "$GH_ASSET" > $target
-# curl $CURL_ARGS \
-#     --progress-bar \
-#     --proxy $proxy_set \
-#     -H "Authorization: Bearer $GITHUB_API_TOKEN" \
-#     -H 'Accept: application/vnd.github+json' \
-#     "https://api.github.com/repos/a-givertzman/s7-data-server/zipball/Fault-Registrator" > $target
-
-
-#     # -H 'Accept: application/octet-stream' \
-#     # -H 'Accept: application/json' \
 # exit 0
-
 
 # read -p "Enter $userName@$hostName password: " sshPassword
 # read -p "Enter root@$hostName password: " rPassword
 
+
+############ INSTALLING SSH KEY ON REMOTE ############
+    ssh-copy-id -i ~/.ssh/id_rsa.pub $userName@$hostName
+    # ssh -t $userName@$hostName "mkdir -p ~/.ssh && /tmp/$sName'"
+    # scp ~/.ssh/id_rsa.pub $userName@$hostName:/tmp/
 
 ############ INSTALL SUDO ############
 if $installSudo; then
@@ -172,25 +150,27 @@ if $installLxde; then
     echo -e "\n${BLUE}Installing LXDE on remote $hostName...${NC}"
     scp $path $userName@$hostName:/tmp/
     ssh -t $userName@$hostName "su -c 'chmod +x /tmp/$sName && /tmp/$sName'"
+    rebootRemote
 fi
 
 ############ INSTALL LXDE AUTO LOGIN ############
-if $installAutologin | $installLxde; then
+if $installAutologin || $installLxde; then
     sName=install_autologin.sh
     path=$(dirname -- "$0")/$sName 
     echo -e "\n${BLUE}Installing LXDE autologin on remote $hostName...${NC}"
     scp $path $userName@$hostName:/tmp/
     ssh -t $userName@$hostName "su -c 'chmod +x /tmp/$sName && /tmp/$sName'"
+    rebootRemote
 fi
 
 ############ INSTALL PYTHON3.10 ############
-if $installPython310; then
+if $installPackages; then
     sName=install_python310.sh
     path=$(dirname -- "$0")/$sName
     echo -e "\n${BLUE}Installing python3.10 on remote $hostName...${NC}"
     files=""
     packages=""
-    for package in "${py310Distros[@]}"; do 
+    for package in "${instPackages[@]}"; do 
         # local name file url
         package=$(echo $package | sed 's/\s|*\s*/ /g')
         read -r name type url file extracted <<< $package
@@ -223,7 +203,6 @@ if $installPython310; then
     done
     echo -e "coping files..."
     # echo -e "$files"
-    # echo -e $files | xargs -i scp {} $path $userName@$hostName:/tmp/
     scp $path$files $userName@$hostName:/tmp/
     echo -e "instaling applications..."
     ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName$packages"
@@ -281,3 +260,45 @@ if $installServices; then
     ssh -t $userName@$hostName "chmod +x /tmp/$sName && su -c'/tmp/$sName'"
     rebootRemote
 fi
+
+
+
+
+
+############ USED FOR TESTING ONLY ############
+
+
+# proxy_set="http://constr:constr@192.168.120.234:3128"
+# GITHUB_API_TOKEN=$dsGitToken
+# CURL_ARGS="-LJ"
+
+# owner=$dsGitOwner
+# repo=$dsGitRepo
+# tag=$dsGitTag
+# GH_API="https://api.github.com"
+# GH_REPO="$GH_API/repos/$owner/$repo"
+# GH_TAGS="$GH_REPO/releases/tags/$tag"
+# GH_ASSET="$GH_REPO/releases/assets/"
+# GH_ASSET="$GH_REPO/releases/tags/$tag"
+
+# target=$dirName/distro/ds_src.zip
+
+# echo "url: $GH_ASSET"
+# echo "target: $target"
+
+# curl $CURL_ARGS \
+#     --progress-bar \
+#     --proxy $proxy_set \
+#     -H "Authorization: Bearer $GITHUB_API_TOKEN" \
+#     -H 'Accept: application/json' \
+#     "$GH_ASSET" > $target
+# curl $CURL_ARGS \
+#     --progress-bar \
+#     --proxy $proxy_set \
+#     -H "Authorization: Bearer $GITHUB_API_TOKEN" \
+#     -H 'Accept: application/vnd.github+json' \
+#     "https://api.github.com/repos/a-givertzman/s7-data-server/zipball/Fault-Registrator" > $target
+
+
+#     # -H 'Accept: application/octet-stream' \
+#     # -H 'Accept: application/json' \
