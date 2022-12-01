@@ -37,38 +37,6 @@ for package in $*; do
     echo -e "\tfile: $file"
     echo -e "\turl: $url"
 
-    if [ $type == apt ]; then
-        if isInstalled $name; then
-            echo -e "\t${BLUE}$nane already installed on $hostname...${NC}"
-        else
-            echo -e "\n\t${BLUE}Installing $name on $hostname...${NC}"
-            if ! [ -z "${file}" ]; then
-                if ! [[ $file == *.deb ]]; then
-                    echo -e "\t${BLUE}Extracting /tmp/$file on remote $hostname...${NC}"
-                    tar -xvf "/tmp/$file" --directory '/tmp'
-                    file=$extracted
-                fi
-                sudo apt install /tmp/$file -y
-            else
-                sudo apt install $name -y
-            fi
-        fi 
-    fi
-    if [ $type == apt-conf ]; then
-        if isInstalled $name; then
-            echo -e "\t${BLUE}$nane already installed on $hostname...${NC}"
-        else
-            echo -e "\n\t${BLUE}Installing apt coniguration for $name on $hostname...${NC}"
-            if ! [ -z "${file}" ]; then
-                if ! [[ $file == *.deb ]]; then
-                    echo -e "\t${BLUE}Extracting /tmp/$file on remote $hostname...${NC}"
-                    tar -xvf "/tmp/$file" --directory '/tmp'
-                    file=$extracted
-                fi
-                sudo dpkg -i /tmp/$file && sudo apt update
-            fi
-        fi 
-    fi
     if [ $type == src ]; then
         if isInstalled $name; then
             echo -e "\t${BLUE}$nane already installed on $hostname...${NC}"
@@ -93,18 +61,5 @@ for package in $*; do
                 fi
             fi
         fi 
-    fi
-    if [ $type == pip ]; then
-        echo -e "\n\t${BLUE}Installing $name on $hostname...${NC}"
-        if ! [ -z "${file}" ]; then
-            # tar -xvf "/tmp/$file" --directory '/tmp/$name'
-            # python3.10 -m pip install -e /tmp/$file
-            # python3.10 -m pip install /tmp/$file
-            python3.10 -m pip install $name --no-index --find-links /tmp/$file #file:///srv/pkg/mypackage
-        else
-            python3.10 -m pip install \
-                ${proxySet:+ --proxy "${proxySet}"} \
-                $name
-        fi
     fi
 done

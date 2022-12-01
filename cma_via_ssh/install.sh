@@ -50,7 +50,7 @@ rebootRemote() {
 ############ INSTALLETION SETTINGS ############
 userName=scada
 hostName=192.168.120.171
-proxy_set="http://constr:constr@192.168.120.234:3128"
+proxySet="http://constr:constr@192.168.120.234:3128" # "null" | "http://user:pass@ip:port
 
 
 installSudo=false
@@ -87,11 +87,11 @@ installPackages=true
         #     Python-3.10.8.tgz | Python-3.10.8
         # "
         "python3-pip apt"
-        "mysql-connector-python
-            apt
-            https://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-py3_8.0.31-1debian11_amd64.deb
-            mysql-connector-python-py3_8.0.31-1debian11_amd64.deb
-        "
+        # "mysql-connector-python
+        #     apt
+        #     https://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-py3_8.0.31-1debian11_amd64.deb
+        #     mysql-connector-python-py3_8.0.31-1debian11_amd64.deb
+        # "
         "libaio1 apt"   # for mysql-server
         "mysql-server
             apt-conf
@@ -99,23 +99,23 @@ installPackages=true
             mysql-apt-config_0.8.24-1_all.deb
         "
         "mysql-server apt"
+            # https://files.pythonhosted.org/packages/ba/39/04c7476bcbb457986a83eeac80c9226bbee63ed991e62f73c100832c166a/mysql_connector_python-8.0.31-cp311-cp311-manylinux1_x86_64.whl
+            # mysql_connector_python-8.0.31-cp311-cp311-manylinux1_x86_64.whl
         "mysql-connector-python
             pip
-            https://files.pythonhosted.org/packages/ba/39/04c7476bcbb457986a83eeac80c9226bbee63ed991e62f73c100832c166a/mysql_connector_python-8.0.31-cp311-cp311-manylinux1_x86_64.whl
-            mysql_connector_python-8.0.31-cp311-cp311-manylinux1_x86_64.whl
         "
+            # https://files.pythonhosted.org/packages/42/38/775b43da55fa7473015eddc9a819571517d9a271a9f8134f68fb9be2f212/numpy-1.23.5.tar.gz
+            # numpy-1.23.5.tar.gz
         "numpy
             pip
-            https://files.pythonhosted.org/packages/42/38/775b43da55fa7473015eddc9a819571517d9a271a9f8134f68fb9be2f212/numpy-1.23.5.tar.gz
-            numpy-1.23.5.tar.gz
         "
+            # https://files.pythonhosted.org/packages/d7/42/06793d68ddf1c07c975cd8b84d8240c854b718ca05b1976a2fb8588ee770/python-snap7-1.2.tar.gz
+            # python-snap7-1.2.tar.gz
         "python-snap7
             pip
-            https://files.pythonhosted.org/packages/d7/42/06793d68ddf1c07c975cd8b84d8240c854b718ca05b1976a2fb8588ee770/python-snap7-1.2.tar.gz
-            python-snap7-1.2.tar.gz
         "
     )
-installCma=true
+installCma=false
     cmaAppDir='/home/scada/app/cma/'
     cmaAppName='crane_monitoring_app'
     cmaGitOwner='a-givertzman'
@@ -125,7 +125,7 @@ installCma=true
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     cmaGitToken='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'
 # installApiServer=false
-installDataServer=true
+installDataServer=false
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
     dsGitOwner='a-givertzman'
@@ -134,12 +134,14 @@ installDataServer=true
     dsGitAsset='s7-data-server-internal_v0.0.30.tar.gz' #'ds_release.zip' 
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     dsGitToken='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'
-installServices=true
+installServices=false
 
 # exit 0
 
-# read -p "Enter $userName@$hostName password: " sshPassword
-# read -p "Enter root@$hostName password: " rPassword
+# read -p "Enter $userName@$hostName password: " sshPass
+
+sudoPass="null" 
+# read -p "Enter [sudo] $user@$hostName password: " sudoPass    # uncomment to use common sudo pass, will be applyed to all scripts
 
 
 ############ INSTALLING SSH KEY ON REMOTE ############
@@ -154,26 +156,6 @@ if $installSudo; then
     echo -e "\n${BLUE}Installing sudo on remote $hostName...${NC}"
     scp $path $userName@$hostName:/tmp/
     ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
-fi
-
-############ INSTALL LXDE ############
-if $installLxde; then
-    sName=install_lxde.sh
-    path=$(dirname -- "$0")/$sName 
-    echo -e "\n${BLUE}Installing LXDE on remote $hostName...${NC}"
-    scp $path $userName@$hostName:/tmp/
-    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
-    rebootRemote
-fi
-
-############ INSTALL LXDE AUTO LOGIN ############
-if $installAutologin || $installLxde; then
-    sName=install_autologin.sh
-    path=$(dirname -- "$0")/$sName 
-    echo -e "\n${BLUE}Installing LXDE autologin on remote $hostName...${NC}"
-    scp $path $userName@$hostName:/tmp/
-    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
-    rebootRemote
 fi
 
 ############ INSTALL PACKAGES ############
@@ -196,12 +178,12 @@ if $installPackages; then
                 if [ -f "$tmpPath" ]; then
                     echo "$tmpPath exists."
                 else
-                    if ! [ -z "${proxy_set}" ]; then
+                    if ! [ -z "${proxySet}" ]; then
                         curl $CURL_ARGS \
                             --location --max-redirs 10 \
                             --create-dirs \
                             --progress-bar \
-                            --proxy $proxy_set \
+                            --proxy $proxySet \
                             -o $tmpPath \
                             $url
                     else
@@ -220,7 +202,27 @@ if $installPackages; then
     # echo -e "$files"
     scp $path$files $userName@$hostName:/tmp/
     echo -e "instaling applications..."
-    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName$packages"
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName $sudoPass $proxySet 'null' $packages"
+fi
+
+############ INSTALL LXDE ############
+if $installLxde; then
+    sName=install_lxde.sh
+    path=$(dirname -- "$0")/$sName 
+    echo -e "\n${BLUE}Installing LXDE on remote $hostName...${NC}"
+    scp $path $userName@$hostName:/tmp/
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
+    rebootRemote
+fi
+
+############ INSTALL LXDE AUTO LOGIN ############
+if $installAutologin || $installLxde; then
+    sName=install_autologin.sh
+    path=$(dirname -- "$0")/$sName 
+    echo -e "\n${BLUE}Installing LXDE autologin on remote $hostName...${NC}"
+    scp $path $userName@$hostName:/tmp/
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
+    rebootRemote
 fi
 
 ############ INSTALL DATA SERVER ############
@@ -239,7 +241,7 @@ if $installDataServer; then
                         #     --location --max-redirs 10 \
                         #     --create-dirs \
                         #     --progress-bar \
-                        #     --proxy $proxy_set \
+                        #     --proxy $proxySet \
                         #     -o $tmpPath \
                         #     -u 'a.givertzman@icloud.com' \
                         #     'https://api.github.com/repos/a-givertzman/s7-data-server/tarball/Fault-Registrator'
@@ -293,7 +295,7 @@ fi
 ############ USED FOR TESTING ONLY ############
 
 
-# proxy_set="http://constr:constr@192.168.120.234:3128"
+# proxySet="http://constr:constr@192.168.120.234:3128"
 # GITHUB_API_TOKEN=$dsGitToken
 # CURL_ARGS="-LJ"
 
@@ -313,13 +315,13 @@ fi
 
 # curl $CURL_ARGS \
 #     --progress-bar \
-#     --proxy $proxy_set \
+#     --proxy $proxySet \
 #     -H "Authorization: Bearer $GITHUB_API_TOKEN" \
 #     -H 'Accept: application/json' \
 #     "$GH_ASSET" > $target
 # curl $CURL_ARGS \
 #     --progress-bar \
-#     --proxy $proxy_set \
+#     --proxy $proxySet \
 #     -H "Authorization: Bearer $GITHUB_API_TOKEN" \
 #     -H 'Accept: application/vnd.github+json' \
 #     "https://api.github.com/repos/a-givertzman/s7-data-server/zipball/Fault-Registrator" > $target

@@ -46,7 +46,7 @@ if isInstalled $packageName; then
 else
     echo -e "installing sudo..."
     checkRootPassword
-    echo $rPassword | su -c "apt install $app -y"
+    echo $rPassword | su -c "apt install $packageName -y"
 fi 
 
 
@@ -73,5 +73,5 @@ else
     echo -e "user not found, id = $userId [$userName]"
     echo -e $rPassword | su -c "sudo useradd -g sudo $userName"
   fi
-  echo -e $rPassword | su -c "sudo reboot"
+  # echo -e $rPassword | su -c "sudo reboot"
 fi
