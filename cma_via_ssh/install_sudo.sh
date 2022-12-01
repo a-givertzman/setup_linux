@@ -1,5 +1,9 @@
 #!/bin/bash
 
+NC='\033[0m'
+BLUE='\033[0;34m'         # Blue
+RED='\033[0;31m'          # Red
+
 rPassword=""
 
 isInstalled() {
@@ -27,8 +31,11 @@ checkRootPassword() {
 
 isHasSudoAccess() {
   # printf "mypassword\n" | sudo -S /bin/chmod --help >/dev/null 2>&1
-  # if [ $? -eq 0 ];then
-  if sudo -nv 2>&1;then
+  prompt=$(sudo -nv 2>&1)
+  if [ $? -eq 0 ];then
+     echo -e "User $(whoami) has sudo access!"
+     return 0
+  elif echo $prompt | grep -q '^sudo:'; then
      echo -e "User $(whoami) has sudo access!"
      return 0
   else

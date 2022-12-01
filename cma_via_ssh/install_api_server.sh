@@ -1,5 +1,9 @@
 #!/bin/bash
 
+NC='\033[0m'
+BLUE='\033[0;34m'         # Blue
+RED='\033[0;31m'          # Red
+
 read tmpPath appDir appName <<<$@
 echo -e "\tApplication release archive: $tmpPath"
 echo -e "\tApplication instalation path: $appDir"

@@ -54,12 +54,13 @@ proxySet="http://constr:constr@192.168.120.234:3128" # "null" | "http://user:pas
 
 
 installSudo=false
-installLxde=false
+installLxde=true
 installAutologin=false
-installPackages=true
+installPackages=false
     readonly instPackages=(
         "unzip apt"
         "lxde-core apt" # GUI
+        "onboard apt"   # GUI
             # build-essential_12.9_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/b/build-essential/build-essential_12.9_amd64.deb
         "build-essential apt" # for python3.10
@@ -211,6 +212,7 @@ if $installLxde; then
     path=$(dirname -- "$0")/$sName 
     echo -e "\n${BLUE}Installing LXDE on remote $hostName...${NC}"
     scp $path $userName@$hostName:/tmp/
+    scp $(dirname -- "$0")/onboard-autostart.desktop $userName@$hostName:/tmp/
     ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
     rebootRemote
 fi

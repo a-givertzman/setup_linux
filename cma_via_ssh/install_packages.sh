@@ -1,5 +1,9 @@
 #!/bin/bash
 
+NC='\033[0m'
+BLUE='\033[0;34m'         # Blue
+RED='\033[0;31m'          # Red
+
 sudoPass=${1/null/}
 proxySet=${2/null/}
 reserve=${3/null/}
@@ -100,7 +104,7 @@ for package in $*; do
             # tar -xvf "/tmp/$file" --directory '/tmp/$name'
             # python3.10 -m pip install -e /tmp/$file
             # python3.10 -m pip install /tmp/$file
-            python3.10 -m pip install $name --no-index --find-links /tmp/$file #file:///srv/pkg/mypackage
+            python3.10 -m pip install $name --no-index --find-links /tmp/$file
         else
             python3.10 -m pip install \
                 ${proxySet:+ --proxy "${proxySet}"} \

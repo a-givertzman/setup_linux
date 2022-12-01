@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=Onboard
+Name[ru]=Onboard
+Name[uk]=Onboard
+GenericName=Onboard onscreen keyboard
+GenericName[ru]=Экранная клавиатура Onboard
+GenericName[uk]=Onboard екранна клавіатура
+Comment=Flexible onscreen keyboard
+Comment[ru]=Экранная клавиатура Onboard
+Comment[uk]=Onboard екранна клавіатура
+Exec=onboard --keep-aspect --layout=Compact --theme=Droid --startup-delay=3.0
+Icon=onboard
+Type=Application
+NoDisplay=true
+X-Ubuntu-Gettext-Domain=onboard
+AutostartCondition=GSettings org.gnome.desktop.a11y.applications screen-keyboard-enabled
+X-GNOME-AutoRestart=true
+OnlyShowIn=Unity;MATE;

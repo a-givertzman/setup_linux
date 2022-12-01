@@ -1,5 +1,9 @@
 #!/bin/bash
 
+NC='\033[0m'
+BLUE='\033[0;34m'         # Blue
+RED='\033[0;31m'          # Red
+
 # read rPassword <<<$@
 # echo -e "\tRoot password: $rPassword"
 

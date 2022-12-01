@@ -1,5 +1,9 @@
 #!/bin/bash
 
+NC='\033[0m'
+BLUE='\033[0;34m'         # Blue
+RED='\033[0;31m'          # Red
+
 autoLoginConfPath='/etc/lightdm/lightdm.conf'
 
 sudo ls -la /etc/lightdm
