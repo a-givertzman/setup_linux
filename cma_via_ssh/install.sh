@@ -49,12 +49,13 @@ rebootRemote() {
 
 ############ INSTALLETION SETTINGS ############
 userName=scada
-hostName=192.168.120.171
+hostName=192.168.120.175
 proxySet="http://constr:constr@192.168.120.234:3128" # "null" | "http://user:pass@ip:port
 
 
 installSudo=false
-installLxde=true
+installLxde=false
+    onboardAutostartDesktop=onboard-autostart.desktop
 installAutologin=false
 installPackages=false
     readonly instPackages=(
@@ -81,7 +82,7 @@ installPackages=false
         "libffi-dev apt"   # for python3.10
         "libbz2-dev apt"
         "wget apt"   # for python3.10"
-        "xinput apt"
+        "xinput apt"    # for touchscreen
         # "python3.10
         #     src
         #     https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz
@@ -126,7 +127,7 @@ installCma=false
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     cmaGitToken='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'
 # installApiServer=false
-installDataServer=false
+installDataServer=true
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
     dsGitOwner='a-givertzman'
@@ -135,6 +136,7 @@ installDataServer=false
     dsGitAsset='s7-data-server-internal_v0.0.30.tar.gz' #'ds_release.zip' 
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     dsGitToken='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'
+    dsMySqlStructure=crane_data_servers.sql
 installServices=false
 
 # exit 0
@@ -206,13 +208,17 @@ if $installPackages; then
     ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName $sudoPass $proxySet 'null' $packages"
 fi
 
+############ INSTALL MYSQL DATABASE ############
+ssh root@host "mysql -u root -p database" < $dsMySqlStructure
+
+
 ############ INSTALL LXDE ############
 if $installLxde; then
     sName=install_lxde.sh
     path=$(dirname -- "$0")/$sName 
     echo -e "\n${BLUE}Installing LXDE on remote $hostName...${NC}"
     scp $path $userName@$hostName:/tmp/
-    scp $(dirname -- "$0")/onboard-autostart.desktop $userName@$hostName:/tmp/
+    scp $(dirname -- "$0")/conf/$onboardAutostartDesktop $userName@$hostName:/tmp/
     ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
     rebootRemote
 fi

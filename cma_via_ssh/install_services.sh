@@ -69,3 +69,17 @@ sudo systemctl start configure_ui.service
 
 sudo systemctl enable scada_app.service
 sudo systemctl start scada_app.service
+
+
+journaldConfPath=/etc/systemd/journald.conf
+############ Configure systemd-journald.service ############
+echo -e "\t${BLUE}Configuring systemd-journald.service in "$journaldConfPath"...${NC}"
+if [ -f $journaldConfPath ]; then
+    pattern='^#*MaxRetentionSec.*$'
+    sudo sed -i -r "s/$pattern/MaxRetentionSec=3month/1" $journaldConfPath
+    echo -e "\tdone"
+else
+    echo -e "\t\t${RED}autostart config not found in: "$journaldConfPath"${NC}"
+    # touch $xscreensaverConfPath
+    # echo 'mode:           off' > $journaldConfPath
+fi
