@@ -52,9 +52,12 @@ userName=scada
 hostName=192.168.120.175
 proxySet="http://constr:constr@192.168.120.234:3128" # "null" | "http://user:pass@ip:port
 
+printf -vl "%${COLUMNS:-`tput cols 2>&-||echo 80`}s\n" && echo ${l// /#};
+echo -e "\n${BBlue}Installing Crane Application & envirenment on the host $hostName...${NC}\n"
+
 
 installSudo=false
-installLxde=true
+installLxde=false
 installAutologin=false
 installPackages=false
     readonly instPackages=(
@@ -126,7 +129,7 @@ installCma=false
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     cmaGitToken='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'
 # installApiServer=false
-installMySqlDatabase=false
+installMySqlDatabase=true
 installDataServer=false
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
@@ -210,7 +213,7 @@ fi
 
 ############ INSTALL MYSQL DATABASE ############
 if $installMySqlDatabase; then
-    ssh root@host "mysql -u root -p database" < $dsMySqlStructure
+    ssh -t $userName@$hostName "echo '123qweasd' | mysql -u root -p" < $(dirname -- "$0")/conf/$dsMySqlStructure
 fi
 
 
