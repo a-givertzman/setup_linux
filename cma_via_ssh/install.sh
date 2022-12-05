@@ -54,8 +54,7 @@ proxySet="http://constr:constr@192.168.120.234:3128" # "null" | "http://user:pas
 
 
 installSudo=false
-installLxde=false
-    onboardAutostartDesktop=onboard-autostart.desktop
+installLxde=true
 installAutologin=false
 installPackages=false
     readonly instPackages=(
@@ -127,7 +126,8 @@ installCma=false
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     cmaGitToken='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'
 # installApiServer=false
-installDataServer=true
+installMySqlDatabase=false
+installDataServer=false
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
     dsGitOwner='a-givertzman'
@@ -209,7 +209,9 @@ if $installPackages; then
 fi
 
 ############ INSTALL MYSQL DATABASE ############
-ssh root@host "mysql -u root -p database" < $dsMySqlStructure
+if $installMySqlDatabase; then
+    ssh root@host "mysql -u root -p database" < $dsMySqlStructure
+fi
 
 
 ############ INSTALL LXDE ############

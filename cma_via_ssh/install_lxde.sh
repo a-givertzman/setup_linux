@@ -8,6 +8,58 @@ RED='\033[0;31m'          # Red
 autoStartConfPath='/etc/xdg/lxsession/LXDE/autostart'
 xscreensaverConfPath='/home/scada/.xscreensaver'
 
+
+insertAfterPattern() {
+    pattern=$1
+    toInsert=$2
+    path=$3
+    if [ -z "${pattern}" ] | [ -z "${toInsert}" ] | [ -z "${path}" ]; then
+        echo -e "wrong params!"
+    else
+        # echo -e "\tpattern: $pattern"
+        # echo -e "\ttoInsert: $toInsert"
+        # echo -e "\tpath: $path"
+        sudo awk "!found && /$pattern/ {
+            print;
+            print \"$toInsert\"; 
+            next;
+            found=1;
+        } 1" $path > /tmp/insertAfterPattern.tmp
+        mv /tmp/insertAfterPattern.tmp $path
+        echo -e "\tinstalled success!"
+    fi
+}
+
+setProperty() {
+    pattern=$1
+    toInsert=$2
+    path=$3
+    sudo sed -i -r "s/$pattern/$toInsert/1" $path
+    if sudo cat $path | grep -E -o "^$toInsert$"; then
+        echo -e "\tProperty '$toInsert' already installed into '$path'"
+    else
+        echo -e "\tProperty '$toInsert' not found in the '$path'"
+        echo -e "\t\ttrying to add '$toInsert'"
+        echo $toInsert | sudo tee -a $path
+        if sudo cat $path | grep -E -o "^$toInsert$"; then
+            echo -e "\tProperty '$toInsert' installed into '$path' successful!"
+        else
+            echo -e "\t${RED}Property '$toInsert' is not installed into '$path'${NC}"
+        fi
+    fi
+}
+unsetProperty() {
+    pattern=$1
+    toInsert=$2
+    path=$3
+    sudo sed -i -r "s/$pattern/$toInsert/1" $path
+    if sudo cat $path | grep -E -o $pattern; then
+        echo -e "\t${RED}Can\'t unset '$toInsert' in '$path'${NC}"
+    else
+        echo -e "\tProperty '$toInsert' unset successful!"
+    fi
+}
+
 ############ Disable xscreensaver ############
 echo -e "\t${BLUE}Disabling xscreensaver in "$xscreensaverConfPath"...${NC}"
 if [ -f $xscreensaverConfPath ]; then
@@ -23,9 +75,11 @@ fi
 ############ Configure autostart ############
 echo -e "\t${BLUE}Configuring autostart in "$autoStartConfPath"...${NC}"
 if [ -f $autoStartConfPath ]; then
-    pattern='^@lxpanel.*$'
+    # pattern='^@lxpanel.*$'
     # pattern='^#\s*@lxpanel.*$'
-    sudo sed -i -r "s/$pattern/#@lxpanel --profile LXDE/1" $autoStartConfPath
+    # sudo sed -i -r "s/$pattern/#@lxpanel --profile LXDE/1" $autoStartConfPath
+    unsetProperty '^@lxpanel.*$' '#@lxpanel --profile LXDE' $autoStartConfPath
+    setProperty '^#\s*@onboard.*$' '@onboard --keep-aspect --layout=Compact --theme=Droid' $autoStartConfPath
     echo -e "\tdone"
 else
     echo -e "\t\t${RED}autostart config not found in: "$autoStartConfPath"${NC}"
@@ -35,5 +89,5 @@ fi
 
 
 ############ Configure onboard ############
-sudo yes | cp -rf /tmp/onboard-autostart.desktop /etc/xdg/autostart/onboard-autostart.desktop 
+# sudo yes | cp -rf /tmp/onboard-autostart.desktop /etc/xdg/autostart/onboard-autostart.desktop 
 
