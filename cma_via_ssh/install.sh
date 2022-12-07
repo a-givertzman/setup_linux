@@ -2,6 +2,7 @@
 
 dirName=$(dirname -- "$0")
 source "$dirName/colors.sh"
+source ""
 # echo -e "\n${RED}start from dir: $dirName${NC}"
 
 isInstalled() {
@@ -129,7 +130,7 @@ installCma=false
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     cmaGitToken='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'
 # installApiServer=false
-installMySqlDatabase=true
+installMySqlDatabase=false
 installDataServer=false
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
@@ -158,7 +159,7 @@ sudoPass="null"
 ############ INSTALL SUDO ############
 if $installSudo; then
     sName=install_sudo.sh
-    path=$(dirname -- "$0")/$sName 
+    path=$dirName/$sName 
     echo -e "\n${BLUE}Installing sudo on remote $hostName...${NC}"
     scp $path $userName@$hostName:/tmp/
     ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
@@ -167,7 +168,7 @@ fi
 ############ INSTALL PACKAGES ############
 if $installPackages; then
     sName=install_packages.sh
-    path=$(dirname -- "$0")/$sName
+    path=$dirName/$sName
     echo -e "\n${BLUE}Installing python3.10 on remote $hostName...${NC}"
     files=""
     packages=""
@@ -175,7 +176,7 @@ if $installPackages; then
         # local name file url
         package=$(echo $package | sed 's/\s|*\s*/ /g')
         read -r name type url file extracted <<< $package
-        tmpPath=$(dirname -- "$0")/distro/$file
+        tmpPath=$dirName/distro/$file
         packages="$packages '$name|$type|$url|$file|$extracted'"
         if ! [ -z "${file}" ]; then
             files="$files $tmpPath"
@@ -213,17 +214,17 @@ fi
 
 ############ INSTALL MYSQL DATABASE ############
 if $installMySqlDatabase; then
-    ssh -t $userName@$hostName "echo '123qweasd' | mysql -u root -p" < $(dirname -- "$0")/conf/$dsMySqlStructure
+    ssh -t $userName@$hostName "echo '123qweasd' | mysql -u root -p" < $dirName/conf/$dsMySqlStructure
 fi
 
 
 ############ INSTALL LXDE ############
 if $installLxde; then
     sName=install_lxde.sh
-    path=$(dirname -- "$0")/$sName 
+    path=$dirName/$sName 
     echo -e "\n${BLUE}Installing LXDE on remote $hostName...${NC}"
     scp $path $userName@$hostName:/tmp/
-    scp $(dirname -- "$0")/conf/$onboardAutostartDesktop $userName@$hostName:/tmp/
+    scp $dirName/conf/$onboardAutostartDesktop $userName@$hostName:/tmp/
     ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
     rebootRemote
 fi
@@ -231,7 +232,7 @@ fi
 ############ INSTALL LXDE AUTO LOGIN ############
 if $installAutologin || $installLxde; then
     sName=install_autologin.sh
-    path=$(dirname -- "$0")/$sName 
+    path=$dirName/$sName 
     echo -e "\n${BLUE}Installing LXDE autologin on remote $hostName...${NC}"
     scp $path $userName@$hostName:/tmp/
     ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
@@ -241,15 +242,15 @@ fi
 ############ INSTALL DATA SERVER ############
 if $installDataServer; then
     sName=install_data_server.sh
-    path=$(dirname -- "$0")/$sName
-    tmpPath=$(dirname -- "$0")/distro/$dsGitAsset
+    path=$dirName/$sName
+    tmpPath=$dirName/distro/$dsGitAsset
     echo -e "\n${BLUE}Installing DATA SERVER on remote $hostName...${NC}"
     echo -e "\tchecking local repositiry "$tmpPath""
     if [ -f "$tmpPath" ]; then
         echo "$tmpPath exists."
     else
         echo
-        # $(dirname -- "$0")/download_src.sh $dsGitOwner $dsGitRepo $dsGitBranch $tmpPath
+        # $dirName/download_src.sh $dsGitOwner $dsGitRepo $dsGitBranch $tmpPath
                         # curl --junk-session-cookies \
                         #     --location --max-redirs 10 \
                         #     --create-dirs \
@@ -269,14 +270,14 @@ fi
 ############ INSTALL CMA ############
 if $installCma; then
     sName=install_cma.sh
-    path=$(dirname -- "$0")/$sName
-    tmpPath=$(dirname -- "$0")/distro/$cmaGitAsset
+    path=$dirName/$sName
+    tmpPath=$dirName/distro/$cmaGitAsset
     echo -e "\n${BLUE}Installing CMA on remote $hostName...${NC}"
     echo -e "\tchecking local repositiry "$tmpPath""
     if [ -f "$tmpPath" ]; then
         echo "$tmpPath exists."
     else
-        $(dirname -- "$0")/download.sh $cmaGitOwner $cmaGitRepo $cmaGitTag $cmaGitAsset $tmpPath
+        $dirName/download.sh $cmaGitOwner $cmaGitRepo $cmaGitTag $cmaGitAsset $tmpPath
     fi
     echo -e "coping files..."
     scp $path $tmpPath $userName@$hostName:/tmp/
@@ -287,12 +288,12 @@ fi
 ############ INSTALL SERVICES ############
 if $installServices; then
     sName=install_services.sh
-    path=$(dirname -- "$0")/$sName
-    path1=$(dirname -- "$0")/services/api_server.service 
-    path2=$(dirname -- "$0")/services/data_server.service
-    path3=$(dirname -- "$0")/services/scada_app.service
-    path4=$(dirname -- "$0")/services/configure_ui.service
-    path5=$(dirname -- "$0")/configure_ui.sh
+    path=$dirName/$sName
+    path1=$dirName/services/api_server.service 
+    path2=$dirName/services/data_server.service
+    path3=$dirName/services/scada_app.service
+    path4=$dirName/services/configure_ui.service
+    path5=$dirName/configure_ui.sh
     echo -e "\n${BLUE}Installing services on remote $hostName...${NC}"
     echo -e "coping files..."
     scp $path $path1 $path2 $path3 $path4 $path5 $userName@$hostName:/tmp/
