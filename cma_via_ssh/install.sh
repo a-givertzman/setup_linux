@@ -130,6 +130,7 @@ installCma=false
     cmaGitToken=$ghToken
 # installApiServer=false
 installMySqlDatabase=true
+    sqlDump='crane_data_server.sql'
 installDataServer=false
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
@@ -212,7 +213,12 @@ fi
 
 ############ INSTALL MYSQL DATABASE ############
 if $installMySqlDatabase; then
-    ssh -t $userName@$hostName "echo '123qweasd' | mysql -u root -p" < $dirName/conf/$dsMySqlStructure
+    sName=install_mysql_db.sh
+    path=$dirName/$sName
+    path1=$dirName/conf/$sqlDump 
+    echo -e "\n${BLUE}Installing MYSQL DATABASE on remote $hostName...${NC}"
+    scp $path $path1 $userName@$hostName:/tmp/
+    ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName $sudoPass 'null' $sqlDump"
 fi
 
 
@@ -222,7 +228,7 @@ if $installLxde; then
     path=$dirName/$sName 
     echo -e "\n${BLUE}Installing LXDE on remote $hostName...${NC}"
     scp $path $userName@$hostName:/tmp/
-    scp $dirName/conf/$onboardAutostartDesktop $userName@$hostName:/tmp/
+    # scp $dirName/conf/$onboardAutostartDesktop $userName@$hostName:/tmp/
     ssh -t $userName@$hostName "chmod +x /tmp/$sName && /tmp/$sName"
     rebootRemote
 fi
