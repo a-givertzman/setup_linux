@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Script to download asset file from tag release using GitHub API v3.
 # See: http://stackoverflow.com/a/35688093/55075    
+
+source "$dirName/gh_token.sh"
+
 CWD="$(cd -P -- "$(dirname -- "$0")" && pwd -P)"
 
 # Check dependencies.
@@ -8,7 +11,7 @@ set -e
 type curl grep sed tr >&2
 xargs=$(which gxargs || which xargs)
 
-GITHUB_API_TOKEN='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'
+GITHUB_API_TOKEN=$ghToken
 proxy_set="http://constr:constr@192.168.120.234:3128"
 # Validate settings.
 [ -f ~/.secrets ] && source ~/.secrets
