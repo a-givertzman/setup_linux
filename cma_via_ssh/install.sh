@@ -2,7 +2,7 @@
 
 dirName=$(dirname -- "$0")
 source "$dirName/colors.sh"
-source ""
+source "$dirName/gh_token.sh"
 # echo -e "\n${RED}start from dir: $dirName${NC}"
 
 isInstalled() {
@@ -130,7 +130,7 @@ installCma=false
     # cmaGitToken='GHSAT0AAAAAAB3FNKE3CXTIR7VOFHUAF2NCY37MDRQ'
     cmaGitToken='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'
 # installApiServer=false
-installMySqlDatabase=false
+installMySqlDatabase=true
 installDataServer=false
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
