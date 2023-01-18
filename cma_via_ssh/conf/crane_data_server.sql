@@ -211,6 +211,16 @@ CREATE TABLE `tags` (
 
 USE `crane_data_server`;
 
+CREATE USER IF NOT EXISTS
+    'crane_data_server'@'%'
+    IDENTIFIED BY '00d0-25e4-*&s2-ccds'
+    COMMENT 'User for CMA application';
+
+GRANT ALL ON `crane_data_server`.* TO 'crane_data_server'@'%';
+
+FLUSH PRIVILEGES;
+
+
 --
 -- Final view structure for view `event_view`
 --

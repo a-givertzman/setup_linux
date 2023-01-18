@@ -49,8 +49,8 @@ rebootRemote() {
 # installPackage sshpass
 
 ############ INSTALLETION SETTINGS ############
-userName=scada
-hostName=192.168.120.175
+userName=lobanov #scada
+hostName=localhost #192.168.120.175
 proxySet="http://constr:constr@192.168.120.234:3128" # "null" | "http://user:pass@ip:port
 
 printf -vl "%${COLUMNS:-`tput cols 2>&-||echo 80`}s\n" && echo ${l// /#};
