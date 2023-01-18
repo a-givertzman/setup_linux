@@ -204,7 +204,7 @@ CREATE TABLE `retain` (
 
 LOCK TABLES `retain` WRITE;
 /*!40000 ALTER TABLE `retain` DISABLE KEYS */;
-INSERT INTO `retain` VALUES ('event_max_lid','10589'),('event_max_row','1000000');
+INSERT INTO `retain` VALUES ('event_max_lid','1'),('event_max_row','1000000');
 /*!40000 ALTER TABLE `retain` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
