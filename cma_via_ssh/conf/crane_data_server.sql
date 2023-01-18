@@ -47,6 +47,17 @@ CREATE TABLE `app_user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `app_user`
+--
+
+LOCK TABLES `app_user` WRITE;
+/*!40000 ALTER TABLE `app_user` DISABLE KEYS */;
+INSERT INTO `app_user` VALUES (937,'operator','anton lobanov','anton.lobanov1','3201,3202,3203','2022-04-26 12:46:54','2022-04-28 13:20:47',NULL),(938,'admin','anton lobanov','anton.lobanov2','3201,3202,3203','2022-04-26 12:48:03','2022-05-24 15:07:21',NULL),(939,'operator','anton lobanov','anton.lobanov3','3201,3202,3203','2022-04-26 12:48:32','2022-04-28 13:20:47',NULL),(940,'operator','anton lobanov','anton.lobanov4','3201,3202,3203','2022-04-26 12:52:28','2022-04-28 13:20:47',NULL),(950,'operator','anton lobanov','anton.lobanov5','3201,3202,3203','2022-04-26 12:46:22','2022-04-28 13:20:47',NULL),(985,'operator','anton lobanov','anton.lobanov6','3201,3202,3203','2022-04-26 12:46:22','2022-04-28 13:25:32',NULL);
+/*!40000 ALTER TABLE `app_user` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+--
 -- Table structure for table `event`
 --
 
@@ -186,6 +197,17 @@ CREATE TABLE `retain` (
   PRIMARY KEY (`parameter`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `retain`
+--
+
+LOCK TABLES `retain` WRITE;
+/*!40000 ALTER TABLE `retain` DISABLE KEYS */;
+INSERT INTO `retain` VALUES ('event_max_lid','10589'),('event_max_row','1000000');
+/*!40000 ALTER TABLE `retain` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 --
 -- Table structure for table `tags`
