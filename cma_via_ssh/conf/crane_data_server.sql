@@ -125,7 +125,7 @@ DROP TABLE IF EXISTS `fault`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `fault` (
   `timestamp` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-  `pid` tinyint NOT NULL,
+  `pid` SMALLINT UNSIGNED NOT NULL,
   `value` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT 'Нагрузка лебедки 1 (тонны)',
   PRIMARY KEY (`timestamp`,`pid`),
   KEY `timestamp_idx` (`timestamp`),
