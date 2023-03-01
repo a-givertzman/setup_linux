@@ -49,8 +49,8 @@ rebootRemote() {
 # installPackage sshpass
 
 ############ INSTALLETION SETTINGS ############
-userName=lobanov #scada
-hostName=localhost #192.168.120.175
+userName=scada #lobanov 
+hostName=192.168.120.175 #localhost 
 proxySet="http://constr:constr@192.168.120.234:3128" # "null" | "http://user:pass@ip:port
 
 printf -vl "%${COLUMNS:-`tput cols 2>&-||echo 80`}s\n" && echo ${l// /#};
@@ -63,6 +63,7 @@ installAutologin=false
 installPackages=false
     readonly instPackages=(
         "unzip apt"
+        "libc6 apt" # for flutter app
         "lxde-core apt" # GUI
         "onboard apt"   # GUI
             # build-essential_12.9_amd64.deb
@@ -91,19 +92,19 @@ installPackages=false
         #     https://www.python.org/ftp/python/3.10.8/Python-3.10.8.tgz
         #     Python-3.10.8.tgz | Python-3.10.8
         # "
-        "python3-pip apt"
+        # "python3-pip apt"
         # "mysql-connector-python
         #     apt
         #     https://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-py3_8.0.31-1debian11_amd64.deb
         #     mysql-connector-python-py3_8.0.31-1debian11_amd64.deb
         # "
         "libaio1 apt"   # for mysql-server
-        "mysql-server
-            apt-conf
-            https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb
-            mysql-apt-config_0.8.24-1_all.deb
-        "
-        "mysql-server apt"
+        # "mysql-server
+        #     apt-conf
+        #     https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb
+        #     mysql-apt-config_0.8.24-1_all.deb
+        # "
+        # "mysql-server apt"
             # https://files.pythonhosted.org/packages/ba/39/04c7476bcbb457986a83eeac80c9226bbee63ed991e62f73c100832c166a/mysql_connector_python-8.0.31-cp311-cp311-manylinux1_x86_64.whl
             # mysql_connector_python-8.0.31-cp311-cp311-manylinux1_x86_64.whl
         "mysql-connector-python
@@ -125,13 +126,13 @@ installCma=false
     cmaAppName='crane_monitoring_app'
     cmaGitOwner='a-givertzman'
     cmaGitRepo='crane_monitoring_app'
-    cmaGitTag='internal_v0.0.33'
+    cmaGitTag='internal_v0.0.36'
     cmaGitAsset='release.zip'
     cmaGitToken=$ghToken
 # installApiServer=false
-installMySqlDatabase=true
+installMySqlDatabase=false
     sqlDump='crane_data_server.sql'
-installDataServer=false
+installDataServer=true
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
     dsGitOwner='a-givertzman'
