@@ -52,7 +52,14 @@ CREATE TABLE `app_user` (
 
 LOCK TABLES `app_user` WRITE;
 /*!40000 ALTER TABLE `app_user` DISABLE KEYS */;
-INSERT INTO `app_user` VALUES (937,'operator','anton lobanov','anton.lobanov1','3201,3202,3203','2022-04-26 12:46:54','2022-04-28 13:20:47',NULL),(938,'admin','anton lobanov','anton.lobanov2','3201,3202,3203','2022-04-26 12:48:03','2022-05-24 15:07:21',NULL),(939,'operator','anton lobanov','anton.lobanov3','3201,3202,3203','2022-04-26 12:48:32','2022-04-28 13:20:47',NULL),(940,'operator','anton lobanov','anton.lobanov4','3201,3202,3203','2022-04-26 12:52:28','2022-04-28 13:20:47',NULL),(950,'operator','anton lobanov','anton.lobanov5','3201,3202,3203','2022-04-26 12:46:22','2022-04-28 13:20:47',NULL),(985,'operator','anton lobanov','anton.lobanov6','3201,3202,3203','2022-04-26 12:46:22','2022-04-28 13:25:32',NULL);
+INSERT INTO `app_user` VALUES 
+  ('admin','Admin','admin','3201,3202,3203'),
+  ('operator','Operator 1','operator1','3201,3202,3203'),
+  ('operator','Operator 2','operator2','3201,3202,3203'),
+  ('operator','Operator 3','operator3','3201,3202,3203'),
+  ('operator','Operator 4','operator4','3201,3202,3203'),
+  ('operator','Operator 5','operator5','3201,3202,3203'),
+  ('operator','Operator 6','operator6','3201,3202,3203');
 /*!40000 ALTER TABLE `app_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -96,25 +103,6 @@ DELIMITER ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
 
---
--- Temporary view structure for view `event_view`
---
-
-DROP TABLE IF EXISTS `event_view`;
-/*!50001 DROP VIEW IF EXISTS `event_view`*/;
-SET @saved_cs_client     = @@character_set_client;
-/*!50503 SET character_set_client = utf8mb4 */;
-/*!50001 CREATE VIEW `event_view` AS SELECT 
- 1 AS `uid`,
- 1 AS `pid`,
- 1 AS `value`,
- 1 AS `status`,
- 1 AS `timestamp`,
- 1 AS `type`,
- 1 AS `path`,
- 1 AS `name`,
- 1 AS `description`*/;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `fault`
@@ -149,24 +137,6 @@ CREATE TABLE `fault_sample` (
   PRIMARY KEY (`timestamp_begin`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='Рабочие циклы. Парамеьры работы крана расчитанные в период рабочего цикла';
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Temporary view structure for view `fault_view`
---
-
-DROP TABLE IF EXISTS `fault_view`;
-/*!50001 DROP VIEW IF EXISTS `fault_view`*/;
-SET @saved_cs_client     = @@character_set_client;
-/*!50503 SET character_set_client = utf8mb4 */;
-/*!50001 CREATE VIEW `fault_view` AS SELECT 
- 1 AS `timestamp`,
- 1 AS `pid`,
- 1 AS `value`,
- 1 AS `type`,
- 1 AS `path`,
- 1 AS `name`,
- 1 AS `description`*/;
-SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `report`
@@ -219,8 +189,7 @@ DROP TABLE IF EXISTS `tags`;
 CREATE TABLE `tags` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `type` enum('Bool','Int','UInt','DInt','Word','LInt','Real','Time','Date_And_Time') COLLATE utf8mb4_bin NOT NULL COMMENT 'S7DataType{bool, int, uInt, dInt, word, lInt, real, time, dateAndTime}',
-  `path` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT 'Путь тэга /server/line/ied/',
-  `name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT 'Имя тэга в системе',
+  `name` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT 'Имя тэга в системе /line/ied/db/prefix.name.sufix',
   `description` varchar(255) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT 'Дополнительная информация о тэге',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
@@ -251,45 +220,41 @@ FLUSH PRIVILEGES;
 -- Final view structure for view `event_view`
 --
 
-/*!50001 DROP VIEW IF EXISTS `event_view`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `event_view` AS select `e`.`uid` AS `uid`,`e`.`pid` AS `pid`,`e`.`value` AS `value`,`e`.`status` AS `status`,`e`.`timestamp` AS `timestamp`,`t`.`type` AS `type`,`t`.`path` AS `path`,`t`.`name` AS `name`,`t`.`description` AS `description` from (`event` `e` left join `tags` `t` on((`e`.`pid` = `t`.`id`))) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
+DROP VIEW IF EXISTS `crane_data_server`.`event_view`;
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `crane_data_server`.`event_view` AS
+select
+    `e`.`uid` AS `uid`,
+    `e`.`pid` AS `pid`,
+    `e`.`value` AS `value`,
+    `e`.`status` AS `status`,
+    `e`.`timestamp` AS `timestamp`,
+    `t`.`type` AS `type`,
+    `t`.`name` AS `name`,
+    `t`.`description` AS `description`
+from
+    (`crane_data_server`.`event` `e`
+left join `crane_data_server`.`tags` `t` on
+    ((`e`.`pid` = `t`.`id`)));
 
 --
 -- Final view structure for view `fault_view`
 --
 
-/*!50001 DROP VIEW IF EXISTS `fault_view`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8mb4 */;
-/*!50001 SET character_set_results     = utf8mb4 */;
-/*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `fault_view` AS select `f`.`timestamp` AS `timestamp`,`f`.`pid` AS `pid`,`f`.`value` AS `value`,`t`.`type` AS `type`,`t`.`path` AS `path`,`t`.`name` AS `name`,`t`.`description` AS `description` from (`fault` `f` left join `tags` `t` on((`f`.`pid` = `t`.`id`))) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+DROP VIEW IF EXISTS `crane_data_server`.`fault_view`;
+CREATE OR REPLACE
+ALGORITHM = UNDEFINED VIEW `crane_data_server`.`fault_view` AS
+select
+    `f`.`timestamp` AS `timestamp`,
+    `f`.`pid` AS `pid`,
+    `f`.`value` AS `value`,
+    `t`.`type` AS `type`,
+    `t`.`name` AS `name`,
+    `t`.`description` AS `description`
+from
+    (`crane_data_server`.`fault` `f`
+left join `crane_data_server`.`tags` `t` on
+    ((`f`.`pid` = `t`.`id`)));
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2022-12-07 20:07:51

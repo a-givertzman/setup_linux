@@ -121,7 +121,7 @@ installPackages=false
             pip
         "
     )
-installCma=false
+installCma=true
     cmaAppDir='/home/scada/app/cma/'
     cmaAppName='crane_monitoring_app'
     cmaGitOwner='a-givertzman'
@@ -132,7 +132,7 @@ installCma=false
 # installApiServer=false
 installMySqlDatabase=false
     sqlDump='crane_data_server.sql'
-installDataServer=true
+installDataServer=false
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
     dsGitOwner='a-givertzman'
