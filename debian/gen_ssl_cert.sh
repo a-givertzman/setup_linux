@@ -29,5 +29,8 @@ sudo cp $name.crt $name.key $path
 # updating trusted certificates
 sudo cp $name.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates
+# to remove certificate:
+# remove certificate file from /usr/local/share/ca-certificates/
+# sudo update-ca-certificates --fresh
 
 sudo sudo gitlab-ctl reconfigure
