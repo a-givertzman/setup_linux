@@ -26,5 +26,8 @@ sudo cp $name.crt $name.key $path
 #  nginx['ssl_certificate'] = "/etc/gitlab/ssl/gitlab.copdips.local.crt"
 #  nginx['ssl_certificate_key'] = "/etc/gitlab/ssl/gitlab.copdips.local.key"
 
+# updating trusted certificates
+sudo cp $name.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates
 
 sudo sudo gitlab-ctl reconfigure
