@@ -1,3 +1,5 @@
+#### General guide
+https://wiki.debian.org/Firmware
 
 #### Sound driver:
 https://github.com/thesofproject/sof-bin/
@@ -35,3 +37,6 @@ https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree
 
 then copy to the dir:
 cp *.bin /lib/firmware/i915/
+
+then possible nidded:
+sudo update-initramfs -c -k all
