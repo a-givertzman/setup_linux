@@ -1,0 +1,9 @@
+
+#### To create a disk image for the virtual machine, run:
+
+qemu-img create -f qcow2 alpine-vm.img 5G
+
+qemu-system-x86_64 -hda debian.img -cdrom debian-testing-amd64-netinst.iso -boot d -m 512
+qemu-system-x86_64 -hda imagefile.img -net nic -net tap,ifname=tap0,script=no,downscript=no
+
+
