@@ -29,40 +29,40 @@ USE `crane_data_server`;
 -- Table structure for table `app_user`
 --
 
-DROP TABLE IF EXISTS `app_user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `app_user` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `group` enum('admin','operator') CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT 'operator' COMMENT 'Признак группировки',
-  `name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'ФИО Потльзователя',
-  `login` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT ' Логин',
-  `pass` varchar(2584) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '' COMMENT 'Пароль',
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `deleted` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`,`login`),
-  UNIQUE KEY `login_UNIQUE` (`login`)
-) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='Потльзователи';
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- DROP TABLE IF EXISTS `app_user`;
+-- /*!40101 SET @saved_cs_client     = @@character_set_client */;
+-- /*!50503 SET character_set_client = utf8mb4 */;
+-- CREATE TABLE `app_user` (
+--   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+--   `group` enum('admin','operator') CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT 'operator' COMMENT 'Признак группировки',
+--   `name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT 'ФИО Потльзователя',
+--   `login` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL COMMENT ' Логин',
+--   `pass` varchar(2584) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '' COMMENT 'Пароль',
+--   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+--   `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   `deleted` timestamp NULL DEFAULT NULL,
+--   PRIMARY KEY (`id`,`login`),
+--   UNIQUE KEY `login_UNIQUE` (`login`)
+-- ) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='Потльзователи';
+-- /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `app_user`
 --
 
-LOCK TABLES `app_user` WRITE;
-/*!40000 ALTER TABLE `app_user` DISABLE KEYS */;
-INSERT INTO `app_user` VALUES 
-  ('admin','Admin','admin','3201,3202,3203'),
-  ('operator','Operator 1','operator1','3201,3202,3203'),
-  ('operator','Operator 2','operator2','3201,3202,3203'),
-  ('operator','Operator 3','operator3','3201,3202,3203'),
-  ('operator','Operator 4','operator4','3201,3202,3203'),
-  ('operator','Operator 5','operator5','3201,3202,3203'),
-  ('operator','Operator 6','operator6','3201,3202,3203');
-/*!40000 ALTER TABLE `app_user` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+-- LOCK TABLES `app_user` WRITE;
+-- /*!40000 ALTER TABLE `app_user` DISABLE KEYS */;
+-- INSERT INTO `app_user` VALUES 
+--   ('admin','Admin','admin','3201,3202,3203'),
+--   ('operator','Operator 1','operator1','3201,3202,3203'),
+--   ('operator','Operator 2','operator2','3201,3202,3203'),
+--   ('operator','Operator 3','operator3','3201,3202,3203'),
+--   ('operator','Operator 4','operator4','3201,3202,3203'),
+--   ('operator','Operator 5','operator5','3201,3202,3203'),
+--   ('operator','Operator 6','operator6','3201,3202,3203');
+-- /*!40000 ALTER TABLE `app_user` ENABLE KEYS */;
+-- UNLOCK TABLES;
+-- /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 --
 -- Table structure for table `event`

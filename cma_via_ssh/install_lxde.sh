@@ -5,7 +5,7 @@ BLUE='\033[0;34m'         # Blue
 RED='\033[0;31m'          # Red
 
 
-autoStartConfPath='/etc/xdg/lxsession/LXDE/autostart'
+autoStartConfPath='/home/scada/.config/lxsession/LXDE/autostart'
 xscreensaverConfPath='/home/scada/.xscreensaver'
 
 
@@ -79,7 +79,13 @@ if [ -f $autoStartConfPath ]; then
     # pattern='^#\s*@lxpanel.*$'
     # sudo sed -i -r "s/$pattern/#@lxpanel --profile LXDE/1" $autoStartConfPath
     unsetProperty '^@lxpanel.*$' '#@lxpanel --profile LXDE' $autoStartConfPath
-    setProperty '^#\s*@onboard.*$' '@onboard --keep-aspect --layout=Compact --theme=Droid' $autoStartConfPath
+    # https://launchpad.net/onboard
+    setProperty '^#\s*@onboard.*$' '@onboard --keep-aspect' $autoStartConfPath
+    dconf write /org/onboard/layout "'/usr/share/onboard/layouts/Small.onboard'"
+    dconf write /org/onboard/theme "'Droid'"
+    dconf write /org/onboard/auto-show/enabled true
+    dconf write /org/onboard/window/force-to-top true
+
     echo -e "\tdone"
 else
     echo -e "\t\t${RED}autostart config not found in: "$autoStartConfPath"${NC}"
