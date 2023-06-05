@@ -50,7 +50,7 @@ rebootRemote() {
 
 ############ INSTALLETION SETTINGS ############
 userName=scada #lobanov 
-hostName=192.168.120.175 #localhost 
+hostName=192.168.120.177 #localhost 
 proxySet="http://constr:constr@192.168.120.234:3128" # "null" | "http://user:pass@ip:port
 
 printf -vl "%${COLUMNS:-`tput cols 2>&-||echo 80`}s\n" && echo ${l// /#};
@@ -68,6 +68,7 @@ installPackages=false
         "onboard apt"   # GUI
             # build-essential_12.9_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/b/build-essential/build-essential_12.9_amd64.deb
+        "dconf-cli apt" # for manipulating dconf settings to set up onboard
         "build-essential apt" # for python3.10
             # zlib1g-dev_1.2.13.dfsg-1_amd64.deb
             # http://ftp.ru.debian.org/debian/pool/main/z/zlib/zlib1g-dev_1.2.13.dfsg-1_amd64.deb
@@ -101,12 +102,10 @@ installPackages=false
         "libaio1 apt"   # for mysql-server
         # "mysql-server
         #     apt-conf
-        #     https://repo.mysql.com//mysql-apt-config_0.8.24-1_all.deb
-        #     mysql-apt-config_0.8.24-1_all.deb
+        #     https://repo.mysql.com/mysql-apt-config_0.8.25-1_all.deb
+        #     mysql-apt-config_0.8.25-1_all.deb
         # "
         # "mysql-server apt"
-            # https://files.pythonhosted.org/packages/ba/39/04c7476bcbb457986a83eeac80c9226bbee63ed991e62f73c100832c166a/mysql_connector_python-8.0.31-cp311-cp311-manylinux1_x86_64.whl
-            # mysql_connector_python-8.0.31-cp311-cp311-manylinux1_x86_64.whl
         "mysql-connector-python
             pip
         "

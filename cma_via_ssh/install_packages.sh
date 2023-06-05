@@ -20,7 +20,7 @@ echo -e "\tReserve: $reserve"
 
 isInstalled() {
   target=$1
-  isInstalledResult=$(dpkg-query -l $target)
+  isInstalledResult=$(dpkg --get-selections | grep $target)
   if [[ $isInstalledResult ]]; then
       echo -e "$target is allready installed"
      return 0
@@ -40,7 +40,6 @@ for package in $*; do
     echo -e "\tname: $name"
     echo -e "\tfile: $file"
     echo -e "\turl: $url"
-
     if [ $type == apt ]; then
         if isInstalled $name; then
             echo -e "\t${BLUE}$nane already installed on $hostname...${NC}"
