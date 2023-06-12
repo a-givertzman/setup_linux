@@ -135,6 +135,8 @@ installCma=false
 installMySqlDatabase=false
     sqlDump='crane_data_server.sql'
 installDataServer=false
+    dsBuildFromSources=false
+    dsSrcPath='~/code/py-proj/s7-data-server/'
     dsAppDir='/home/scada/app/data_server/'
     dsAppName='sds_run.py'
     dsGitOwner='a-givertzman'
@@ -252,11 +254,16 @@ if $installDataServer; then
     path=$dirName/$sName
     tmpPath=$dirName/distro/$dsGitAsset
     echo -e "\n${BLUE}Installing DATA SERVER on remote $hostName...${NC}"
-    echo -e "\tchecking local repositiry "$tmpPath""
+    if [-f $dsBuildFromSources ]; then
+        dsSrcPath=~/code/py-proj/s7-data-server/
+        echo -e "\tpreparing local build from sources: "$dsSrcPath""
+        tar -czvf $tmpPath $dsSrcPath
+    fi
+    echo -e "\tchecking local build "$tmpPath""
     if [ -f "$tmpPath" ]; then
         echo "$tmpPath exists."
     else
-        echo
+        echo "ERROR: local build doesnt exists: $tmpPath."
         # $dirName/download_src.sh $dsGitOwner $dsGitRepo $dsGitBranch $tmpPath
                         # curl --junk-session-cookies \
                         #     --location --max-redirs 10 \
