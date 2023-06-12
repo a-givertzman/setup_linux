@@ -60,7 +60,7 @@ echo -e "\n${BBlue}Installing Crane Application & envirenment on the host $hostN
 installSudo=false
 installLxde=false
 installAutologin=false
-installPackages=false
+installPackages=true
     readonly instPackages=(
         "unzip apt"
         "libc6 apt" # for flutter app
@@ -119,8 +119,11 @@ installPackages=false
         "python-snap7
             pip
         "
+        "pyyaml
+            pip
+        "
     )
-installCma=true
+installCma=false
     cmaAppDir='/home/scada/app/cma/'
     cmaAppName='crane_monitoring_app'
     cmaGitOwner='a-givertzman'
@@ -137,7 +140,7 @@ installDataServer=false
     dsGitOwner='a-givertzman'
     dsGitRepo='s7-data-server'
     dsGitBranch='Fault-Registrator'
-    dsGitAsset='s7-data-server-internal_v0.0.30.tar.gz' #'ds_release.zip' 
+    dsGitAsset='s7-data-server-internal_v0.0.31.tar.gz' #'ds_release.zip' 
     dsGitToken=$ghToken
     dsMySqlStructure=crane_data_servers.sql
 installServices=false
